@@ -1,6 +1,6 @@
-# undefiller
+# Little Painter
 
-A demo for Pentagon 128
+A demo for ZX Spectrum 128 
 
 ## Необходимые инструменты
 * [git](https://git-scm.com/)
