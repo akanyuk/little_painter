@@ -23,7 +23,7 @@ page0s	module lib
 	call musicStart
 	ld hl, 0 : ld (INTS_COUNTER), hl
 
-	ld b, 100 : halt : djnz $-1
+	ld b, 255 : halt : djnz $-1
 
 	call PART_INTRO
 
