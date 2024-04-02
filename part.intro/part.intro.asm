@@ -6,7 +6,7 @@
 	ld hl, #5800 : ld de, #5801 : ld bc, #02ff : ld (hl), a : ldir
 
 	; bottom line color
-	ld hl, #5900 : ld de, #5901 : ld bc, #0020 : ld (hl), %00000111 : ldir
+	ld hl, #5900 : ld de, #5901 : ld bc, #0020 : ld (hl), %00000010 : ldir
 	ld bc, #001f : ld (hl), 0 : ldir
 
 	; copying "CREATIVE MEDIA DEMOMAKING CREW" text
