@@ -1,0 +1,119 @@
+<!-- 
+Парсер 16-цветной PNG картинки 128x80 в чанки 2х2
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script type="text/javascript" src="./jquery-1.8.3.min.js"></script>
+<script type="text/javascript" src="./FileSaver.js"></script>
+<title>PNG2DATA</title>
+<script type="text/javascript">
+
+// SETUP BLOCK
+
+//var srcImgFilename = '1.png';
+//var destFilename = '1.data';
+
+var srcImgFilename = '4.png';
+var destFilename = '4.data';
+
+var destExtension = 'asm';
+
+var srcWidth = 0;
+var srcHeight = 0;
+
+var kkolors = {};
+var kkolors_info = {};
+
+$(document).ready(function(){
+	var ctx = document.getElementById('canvas').getContext("2d");
+	var srcImg = new Image();
+	srcImg.src = srcImgFilename;
+	srcImg.onload = function () {
+		ctx.drawImage(srcImg, 0, 0);
+
+		srcWidth = srcImg.width;
+		srcHeight = srcImg.height;
+
+		$('#total').append('<div>Image dimension: ' + srcWidth + 'x' + srcHeight + '</div>');
+		$('#total').append('<div>Data size: ' + (srcWidth * srcHeight / 2) + '</div>');
+
+		var numColors = generateColorsTable(ctx);
+		$('#total').append('<div>Colors found: ' + numColors + '</div>');
+
+		var blob = new Blob([generateData(ctx)], {type: "text/plain;charset=utf-8"});
+		saveAs(blob, destFilename + '.' + destExtension);		
+	}
+});
+
+function generateColorsTable(ctx) {
+	for (y = 0; y < srcWidth; y++) {
+		for (x = 0; x < srcHeight; x++) {
+			var p = ctx.getImageData(x,y,1,1);
+			var curColor = Number(p.data[0] + p.data[1] + p.data[2]);
+
+			if (!kkolors_info[curColor]) {
+				kkolors_info[curColor] = { count: 1, data: p.data };
+			}
+			else {
+				kkolors_info[curColor].count++;	
+			}
+		}
+	}
+
+	// Sort by color weight
+	Object.keys(kkolors_info).sort().forEach(function(key) {
+			kkolors[key] = kkolors_info[key];
+	});
+
+	// Replace values with indexes
+	i = 0;
+	$.each(kkolors, function(key) {
+			kkolors[key] = i++;
+	});
+
+	return i;
+}
+
+function generateData(ctx) {
+	var result = '';
+
+	for (y = 0; y < srcHeight; y++) {
+		for (x = 0; x < srcWidth - 1; x += 2) {
+			var p = ctx.getImageData(x, y, 1, 1);
+			var c1 = kkolors[Number(p.data[0] + p.data[1] + p.data[2])];
+
+			p = ctx.getImageData(x + 1, y, 1, 1);
+			var c2 = kkolors[Number(p.data[0] + p.data[1] + p.data[2])];
+/*
+			var byte = byte2hex(c1*16 + c2);
+			result += "\tdb #" + byte + "\n";
+*/
+			var byte = byte2bin(c1*16 + c2);
+			result += "\tdb %" + byte + "\n";
+
+		}
+
+		result += "\n";
+	}
+
+	return result;
+}
+
+function byte2hex(integer) {
+	var str = Number(integer).toString(16);
+	return str.length == 1 ? "0" + str : str;
+}
+
+function byte2bin(integer) {
+	var str = Number(integer).toString(2);
+	return String(str).padStart(8, '0')
+}
+
+</script>
+</head>
+<body>
+	<canvas id="canvas"></canvas>
+	<div id="total"></div>
+</body></html>

@@ -27,6 +27,11 @@ page0s	module lib
 
 	call PART_INTRO
 
+	call PART_SCR1
+	call PART_SCR1 + 3
+	ld b, 200 : halt : djnz $-1
+	call PART_SCR1 + 6
+
 	; STOP HERE
 	; ifdef _MUSIC_
 	; ld a, P_TRACK : call lib.SetPage
@@ -94,12 +99,15 @@ INTS_COUNTER	equ $+1
 	ei
 	ret
 
-	display /d, '[page 0] bytes before overlap at #7000: ', #7000 - $
-	
-PART_INTRO	include "part.intro/part.intro.asm"
-
 PT3PLAY	include "lib/PTxPlay.asm"
 	incbin "res/nq-oops-intro-2.pt3"
+
+	display /d, '[page 0] bytes before overlap at #7000: ', #7000 - $
+
+	org #7000
+PART_INTRO	include "part.intro/part.intro.asm"
+PART_SCR1	include "part.scr1/part.scr1.asm"
+
 
 page0e	display /d, '[page 0] free: ', #ffff - $, ' (', $, ')'	
 
