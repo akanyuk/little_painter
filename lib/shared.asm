@@ -59,7 +59,31 @@ _b0	rra
 _b1	rra
 	ret nc
 	ret
-	
+
+; Вертикальная заливка экрана 
+; de: адрес экрана начала
+; a: байт, заливки
+; b: количество знакомест
+; c: количество линий
+VerticalFill
+1   	push bc
+    	push de
+2	ld (de), a
+	inc de
+	djnz 2b
+	ex af, af'    
+	pop de
+	call DownDE
+	pop bc
+	dec c
+	ld a,c : or a 
+	ret z
+	ex af, af'
+	jr 1b
+
 Depack	include "dzx0_fast.asm"
 ChunksView	include "chunks2x2.viewer.asm"
+
+PlayCubes	include "cube_player.asm"	
+
 _start

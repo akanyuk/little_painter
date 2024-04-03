@@ -5,7 +5,7 @@
 	jp main	; START + 3 - основная процедура вывода кадра
 	jp setBright	; START + 6 - установка яркости. A - яркость [0-3], C - индекс цвета [0-f]
 
-main	ld ix, CHNK_DATA
+main	ld ix, 0
 	ld h, high CHUNK_SRC
 
 	ld b, 80

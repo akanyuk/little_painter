@@ -41,6 +41,38 @@
 	pop bc
 	djnz 1b
 
+	ld b, 100 : halt : djnz $-1
+
+	; fading CMDC
+	ld a, #46 : call fadeCmdc
+	ld b, 4 : halt : djnz $-1
+	ld a, #47 : call fadeCmdc
+	ld b, 6 : halt : djnz $-1
+	ld a, #46 : call fadeCmdc
+	ld b, 4 : halt : djnz $-1
+	ld a, #43 : call fadeCmdc
+	ld b, 4 : halt : djnz $-1
+	ld a, #42 : call fadeCmdc
+	ld b, 4 : halt : djnz $-1
+	ld a, #41 : call fadeCmdc
+	ld b, 4 : halt : djnz $-1
+	xor a : call fadeCmdc
+
+	; fade logo
+	ld b, 36
+1	push bc
+	xor a           ; Цвет
+	ld b, 32        ; Количество знакомест
+	ld c, 2           ; Количество закрашиваемыз линий за один вызов
+_sc3_de         ld de, #4000     ; Адрес начала атрибутной области
+	call lib.VerticalFill
+	ld (_sc3_de+1), de
+	halt
+	pop bc
+	djnz 1b
+
+	call lib.ClearScreen
+	
 	ret
 
 	; display "CREATIVE MEDIA DEMOMAKING CREW"
@@ -52,6 +84,8 @@ cmdcA2	ld de, #5920
 	ld hl, cmdcA1 + 1 : inc (hl)
 	ld hl, cmdcA2 + 1 : inc (hl)
 	ret
+
+fadeCmdc	ld hl, #5920 : ld de, #5921 : ld bc, #1f : ld (hl), a : ldir : ret
 
 bottomLine	ld a, 104 : or a : jr z, blIsDone : dec a :  ld (bottomLine + 1), a : ret
 blIsDone	ld a, (blA + 1) : cp 32 : ret z

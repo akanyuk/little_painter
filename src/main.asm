@@ -2,7 +2,7 @@
 
 	page 0
 
-	; define _DEBUG_ 1
+	define _DEBUG_ 1
 	define _MUSIC_ 1
 
 	define P_INTRO 4 ; "OUTSIDERS" intro
@@ -26,18 +26,20 @@ page0s	module lib
 	ld b, 255 : halt : djnz $-1
 
 	call PART_INTRO
+	ld b, 20 : halt : djnz $-1
 
 	call PART_SCR1
+	ld b, 50 : halt : djnz $-1
 	call PART_SCR1 + 3
 	ld b, 200 : halt : djnz $-1
 	call PART_SCR1 + 6
 
 	; STOP HERE
-	; ifdef _MUSIC_
-	; ld a, P_TRACK : call lib.SetPage
-	; call PT3PLAY + 8
-	; xor a : ld (MUSIC_STATE), a
-	; endif
+	ifdef _MUSIC_
+	ld a, P_TRACK : call lib.SetPage
+	call PT3PLAY + 8
+	xor a : ld (MUSIC_STATE), a
+	endif
 
 	jr $
 
@@ -99,16 +101,19 @@ INTS_COUNTER	equ $+1
 	ei
 	ret
 
-PT3PLAY	include "lib/PTxPlay.asm"
-	incbin "res/nq-oops-intro-2.pt3"
+	display /d, '[page 0] bytes before overlap at #7200: ', #7200 - $
 
-	display /d, '[page 0] bytes before overlap at #7000: ', #7000 - $
-
-	org #7000
+	org #7200
 PART_INTRO	include "part.intro/part.intro.asm"
 PART_SCR1	include "part.scr1/part.scr1.asm"
 
 
 page0e	display /d, '[page 0] free: ', #ffff - $, ' (', $, ')'	
+
+	define _page1 : page 1 : org #c000
+page1s	
+PT3PLAY	include "lib/PTxPlay.asm"
+	incbin "res/nq-oops-intro-2.pt3"
+page1e	display /d, '[page 1] free: ', 65536 - $, ' (', $, ')'
 
 	include "src/builder.asm"
