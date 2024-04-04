@@ -1,6 +1,6 @@
 	device zxspectrum128
 
-PART_START  	equ #7200
+PART_START  	equ #7500
 
 	org #6000
 start	module lib
@@ -26,7 +26,6 @@ start	module lib
 
 	org PART_START
 	include "part.scr1.asm"
-
 	display /d, 'Part length: ', $ - PART_START
 
 	; build

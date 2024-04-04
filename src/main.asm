@@ -2,7 +2,8 @@
 
 	page 0
 
-	define _DEBUG_ 1
+	define EXTERNAL_PART_START #7500
+	; define _DEBUG_ 1
 	define _MUSIC_ 1
 
 	define P_INTRO 4 ; "OUTSIDERS" intro
@@ -33,6 +34,25 @@ page0s	module lib
 	call PART_SCR1 + 3
 	ld b, 200 : halt : djnz $-1
 	call PART_SCR1 + 6
+
+	ld b, 40 : halt : djnz $-1
+
+	ld hl, PART_SPRMS
+	ld de, EXTERNAL_PART_START
+	call lib.Depack
+
+	ld a, 5 : call lib.SetPage
+	xor a : call lib.SetScreen
+	xor a : call lib.SetScreenAttrA
+	call lib.ClearScreenA
+
+	call EXTERNAL_PART_START ; hl - адрес процедуры на прерываниях
+	call interrStart	
+	call EXTERNAL_PART_START + 3
+	ld b, 160 : halt : djnz $-1
+	call interrStop
+
+	ld b, 160 : halt : djnz $-1
 
 	; STOP HERE
 	ifdef _MUSIC_
@@ -101,12 +121,12 @@ INTS_COUNTER	equ $+1
 	ei
 	ret
 
-	display /d, '[page 0] bytes before overlap at #7200: ', #7200 - $
+	display /d, '[page 0] bytes before overlap external parts: ', EXTERNAL_PART_START, EXTERNAL_PART_START - $
 
-	org #7200
+	org EXTERNAL_PART_START
 PART_INTRO	include "part.intro/part.intro.asm"
 PART_SCR1	include "part.scr1/part.scr1.asm"
-
+PART_SPRMS	incbin "build/part.sprms.bin.zx0"
 
 page0e	display /d, '[page 0] free: ', #ffff - $, ' (', $, ')'	
 

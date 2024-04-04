@@ -1,7 +1,7 @@
 	device zxspectrum128
 	page 0
 
-A_PART_INTRO  	equ #7200
+A_PART_INTRO  	equ #7500
 
 	org #6000
 
