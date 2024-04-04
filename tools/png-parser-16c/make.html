@@ -15,8 +15,8 @@
 //var srcImgFilename = '1.png';
 //var destFilename = '1.data';
 
-var srcImgFilename = '4.png';
-var destFilename = '4.data';
+var srcImgFilename = '128x80_002.png';
+var destFilename = '5.data';
 
 var destExtension = 'asm';
 
@@ -107,6 +107,10 @@ function byte2hex(integer) {
 }
 
 function byte2bin(integer) {
+	if (isNaN(integer)) {
+		return "00000000";
+	}
+
 	var str = Number(integer).toString(2);
 	return String(str).padStart(8, '0')
 }
