@@ -29,6 +29,7 @@ CUR_PAGE	db #00
 CUR_SCREEN	db #00
 
 DownDE	inc d : ld a,d : and #07 : ret nz : ld a,e : sub #e0 : ld e,a : sbc a,a : and #f8 : add a,d : ld d,a : ret
+DownHL	inc h : ld a,h : and #07 : ret nz : ld a,l : sub #e0 : ld l,a : sbc a,a : and #f8 : add a,h : ld h,a : ret
 
 ; usage
 ; ld bc,tstates

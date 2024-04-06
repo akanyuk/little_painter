@@ -24,6 +24,8 @@ page0s	module lib
 	call musicStart
 	ld hl, 0 : ld (INTS_COUNTER), hl
 
+	; jp .tmp
+
 	ld b, 255 : halt : djnz $-1
 
 	call PART_INTRO
@@ -52,17 +54,27 @@ page0s	module lib
 	ld b, 160 : halt : djnz $-1
 	call interrStop
 
-	ld b, 40 : halt : djnz $-1
-
 	xor a : call lib.SetPage
 	ld hl, PART_SCR2
 	ld de, EXTERNAL_PART_START
 	call lib.Depack
 
+	xor a : call lib.SetScreen
+
 	call EXTERNAL_PART_START
 	call EXTERNAL_PART_START + 3
 	ld b, 200 : halt : djnz $-1
 	call EXTERNAL_PART_START + 6
+
+	ld b, 60 : halt : djnz $-1
+
+	xor a : call lib.SetPage
+	ld hl, PART_WORMS
+	ld de, EXTERNAL_PART_START
+	call lib.Depack
+	include "src/pipeline.worms.asm"
+
+.tmp	
 
 	ld b, 160 : halt : djnz $-1
 
@@ -133,13 +145,14 @@ INTS_COUNTER	equ $+1
 	ei
 	ret
 
-	display /d, '[page 0] bytes before overlap external parts: ', EXTERNAL_PART_START, EXTERNAL_PART_START - $
+	display /d, '[page 0] bytes before overlap external parts: ', EXTERNAL_PART_START - $
 
 	org EXTERNAL_PART_START
 PART_INTRO	include "part.intro/part.intro.asm"
 PART_SCR1	include "part.scr1/part.scr1.asm"
 PART_SPRMS	incbin "build/part.sprms.bin.zx0"
 PART_SCR2	incbin "build/part.scr2.bin.zx0"
+PART_WORMS	incbin "build/part.worms.bin.zx0"
 
 page0e	display /d, '[page 0] free: ', #ffff - $, ' (', $, ')'	
 
