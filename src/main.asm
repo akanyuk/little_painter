@@ -24,7 +24,7 @@ page0s	module lib
 	call musicStart
 	ld hl, 0 : ld (INTS_COUNTER), hl
 
-	; jp .tmp
+	; jp _tmp
 
 	ld b, 255 : halt : djnz $-1
 
@@ -74,9 +74,23 @@ page0s	module lib
 	call lib.Depack
 	include "src/pipeline.worms.asm"
 
-.tmp	
+	ld b, 100 : halt : djnz $-1
+	call lib.ClearScreen
 
-	ld b, 160 : halt : djnz $-1
+_tmp	
+	xor a : call lib.SetPage
+	ld hl, PART_SCR3
+	ld de, EXTERNAL_PART_START
+	call lib.Depack
+
+	xor a : call lib.SetScreen
+
+	call EXTERNAL_PART_START
+	call EXTERNAL_PART_START + 3
+	ld b, 200 : halt : djnz $-1
+	call EXTERNAL_PART_START + 6
+
+	ld b, 255 : halt : djnz $-1
 
 	; STOP HERE
 	ifdef _MUSIC_
@@ -153,6 +167,7 @@ PART_SCR1	include "part.scr1/part.scr1.asm"
 PART_SPRMS	incbin "build/part.sprms.bin.zx0"
 PART_SCR2	incbin "build/part.scr2.bin.zx0"
 PART_WORMS	incbin "build/part.worms.bin.zx0"
+PART_SCR3	incbin "build/part.scr3.bin.zx0"
 
 page0e	display /d, '[page 0] free: ', #ffff - $, ' (', $, ')'	
 
