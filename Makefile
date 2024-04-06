@@ -2,7 +2,7 @@
 PROJECT_NAME = pp
 
 # Перечисление частей, которые должны собираться автоматически
-PARTS=part.sprms
+PARTS=part.sprms part.scr2
 
 NAME_SUFFIX = $(shell date +%Y%m%d)-$(shell git log --format="%h" -n 1)
 

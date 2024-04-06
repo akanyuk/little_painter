@@ -52,6 +52,18 @@ page0s	module lib
 	ld b, 160 : halt : djnz $-1
 	call interrStop
 
+	ld b, 40 : halt : djnz $-1
+
+	xor a : call lib.SetPage
+	ld hl, PART_SCR2
+	ld de, EXTERNAL_PART_START
+	call lib.Depack
+
+	call EXTERNAL_PART_START
+	call EXTERNAL_PART_START + 3
+	ld b, 200 : halt : djnz $-1
+	call EXTERNAL_PART_START + 6
+
 	ld b, 160 : halt : djnz $-1
 
 	; STOP HERE
@@ -127,6 +139,7 @@ INTS_COUNTER	equ $+1
 PART_INTRO	include "part.intro/part.intro.asm"
 PART_SCR1	include "part.scr1/part.scr1.asm"
 PART_SPRMS	incbin "build/part.sprms.bin.zx0"
+PART_SCR2	incbin "build/part.scr2.bin.zx0"
 
 page0e	display /d, '[page 0] free: ', #ffff - $, ' (', $, ')'	
 
