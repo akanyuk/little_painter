@@ -7,19 +7,19 @@ Init	ld hl, RndTable
  	ld hl, DotTable + 256
 	jp dot2x2.GenTable
 
-colors1	db #42, #42, #42, #42, #42, #42, #42, #42
+colors1	db #42, #43, #42, #43, #42, #43, #42, #43
 colors2	db #41, #42, #43, #44, #41, #42, #43, #44
 colors4	db #42, #43, #42, #43, #42, #43, #42, #43
 colors5	db #42, #42, #42, #42, #42, #42, #42, #42
 
-Scene1	ld a, 1 : ld (SPEED), a
+Scene1	ld a, 2 : ld (SPEED), a
 
 	ld d, 3 ; cols
-	ld e, 3 ; rows
+	ld e, 2 ; rows
 	call pillars_data.SetupDimension
 
 	ld d, 80 ; margin X
-	ld e, 48 ; margin Y
+	ld e, 56 ; margin Y
 	call pillars_data.SetupMargins
 
 	ld d, %01111111 ; empty color
@@ -29,7 +29,7 @@ Scene1	ld a, 1 : ld (SPEED), a
 	ld a, 40 ; margin between pillars
 	call pillars_data.Build
 
-	ld a, 3 : ld (NUM_WORMS), a
+	ld a, 2 : ld (NUM_WORMS), a
 
 	ld a, 12 ; min length 
 	ld hl, colors1
@@ -38,14 +38,14 @@ Scene1	ld a, 1 : ld (SPEED), a
 	call worms_data.Reset
 	jp pillars_data.Show
 
-Scene2	ld a, 1 : ld (SPEED), a
+Scene2	ld a, 2 : ld (SPEED), a
 
 	ld d, 5 ; cols
-	ld e, 3 ; rows
+	ld e, 2 ; rows
 	call pillars_data.SetupDimension
 
 	ld d, 40 ; margin X
-	ld e, 48 ; margin Y
+	ld e, 56 ; margin Y
 	call pillars_data.SetupMargins
 
 	ld d, %01111111 ; empty color
@@ -67,11 +67,11 @@ Scene2	ld a, 1 : ld (SPEED), a
 Scene3	ld a, 1 : ld (SPEED), a
 
 	ld d, 5 ; cols
-	ld e, 5 ; rows
+	ld e, 4 ; rows
 	call pillars_data.SetupDimension
 
 	ld d, 40 ; margin X
-	ld e, 8 ; margin Y
+	ld e, 16 ; margin Y
 	call pillars_data.SetupMargins
 
 	ld d, %01111111 ; empty color
@@ -92,11 +92,11 @@ Scene3	ld a, 1 : ld (SPEED), a
 
 Scene4	ld a, 1 : ld (SPEED), a
 
-	ld d, 9 ; cols
-	ld e, 7 ; rows
+	ld d, 10 ; cols
+	ld e, 6 ; rows
 	call pillars_data.SetupDimension
 
-	ld d, 24 ; margin X
+	ld d, 16 ; margin X
 	ld e, 16 ; margin Y
 	call pillars_data.SetupMargins
 
@@ -119,11 +119,11 @@ Scene4	ld a, 1 : ld (SPEED), a
 Scene5	ld a, 2 : ld (SPEED), a
 
 	ld d, 11 ; cols
-	ld e, 8 ; rows
+	ld e, 7 ; rows
 	call pillars_data.SetupDimension
 
 	ld d, 0 ; margin X
-	ld e, 8 ; margin Y
+	ld e, 0 ; margin Y
 	call pillars_data.SetupMargins
 
 	ld d, %00000000 ; empty color

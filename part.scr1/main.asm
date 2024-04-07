@@ -9,8 +9,19 @@ start	module lib
 	
 	ei
 	ld sp, start
-
 	ld a, 0 : out (#fe), a
+
+	; painter placeholder
+	ld hl, ppPlaceholder
+1	ld a, (hl) : or a : jr z, _ppPlaceholder
+	inc hl : rst 16 : jr 1b
+ppPlaceholder 	db 22, 1, 1, "Pocket Painter"
+	db 22, 2, 6, "Pocket Painter"
+	db 22, 3, 11, "Pocket Painter"
+	db 22, 4, 16, "Pocket Painter"
+	db 0
+_ppPlaceholder
+	ld hl, #5a80 : ld de, #5a81 : ld bc, #007f : ld (hl), %00101000 : ldir
 
 	call PART_START
 

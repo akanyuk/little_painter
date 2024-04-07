@@ -18,7 +18,7 @@ page0s	module lib
 
 	di : ld sp, page0s
 	xor a : out (#fe), a 
-	call lib.SetScreenAttr
+	ld hl, #5800 : ld de, #5801 : ld bc, #02ff : ld (hl), a : ldir
 	ld a,#5c : ld i,a : ld hl,interr : ld (#5cff),hl : im 2 : ei
 
 	call musicStart
@@ -30,6 +30,21 @@ page0s	module lib
 
 	call PART_INTRO
 	ld b, 20 : halt : djnz $-1
+
+	; painter placeholder
+	ld hl, ppPlaceholder
+1	ld a, (hl) : or a : jr z, _ppPlaceholder
+	inc hl : rst 16 : jr 1b
+ppPlaceholder 	db 22, 1, 1, "Pocket Painter"
+	db 22, 2, 6, "Pocket Painter"
+	db 22, 3, 11, "Pocket Painter"
+	db 22, 4, 16, "Pocket Painter"
+	db 0
+_ppPlaceholder
+	ld hl, #5a80 : ld de, #5a81 : ld bc, #007f : ld (hl), %00101000 : ldir
+	ld a, 7 : call lib.SetPage
+	ld hl, #4000 : ld de, #c000 : ld bc, #1b00 : ldir
+	ld a, 0 : call lib.SetPage
 
 	call PART_SCR1
 	ld b, 50 : halt : djnz $-1
@@ -77,7 +92,6 @@ page0s	module lib
 	ld b, 100 : halt : djnz $-1
 	call lib.ClearScreen
 
-_tmp	
 	xor a : call lib.SetPage
 	ld hl, PART_SCR3
 	ld de, EXTERNAL_PART_START
@@ -92,6 +106,7 @@ _tmp
 
 	ld b, 255 : halt : djnz $-1
 
+_tmp
 	; STOP HERE
 	ifdef _MUSIC_
 	ld a, P_TRACK : call lib.SetPage
