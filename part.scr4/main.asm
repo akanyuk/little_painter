@@ -19,7 +19,7 @@ ppPlaceholder 	db 22, 1, 1, "Pocket Painter"
 	db 22, 2, 6, "Pocket Painter"
 	db 22, 3, 11, "Pocket Painter"
 	db 22, 4, 16, "Pocket Painter"
-	db 0g
+	db 0
 _ppPlaceholder
 	ld hl, #5a80 : ld de, #5a81 : ld bc, #007f : ld (hl), %00101000 : ldir
 	ld a, 7 : call lib.SetPage

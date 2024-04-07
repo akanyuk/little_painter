@@ -4,7 +4,7 @@
 
 	define EXTERNAL_PART_START #7500
 	; define _DEBUG_ 1
-	; define _MUSIC_ 1
+	define _MUSIC_ 1
 
 	define P_INTRO 4 ; "OUTSIDERS" intro
 	define P_TRACK 1 ; трек и плеер лежат здесь
