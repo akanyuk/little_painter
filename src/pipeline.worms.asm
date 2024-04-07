@@ -1,3 +1,8 @@
+	xor a : call lib.SetPage
+	ld hl, PART_WORMS
+	ld de, EXTERNAL_PART_START
+	call lib.Depack
+	
 A_PART_WORMS_INIT   	equ EXTERNAL_PART_START 
 A_PART_WORMS_MAIN 	equ EXTERNAL_PART_START + 3
 A_PART_WORMS_STOP   	equ EXTERNAL_PART_START + 6

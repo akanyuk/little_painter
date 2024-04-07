@@ -71,10 +71,6 @@ page0s	module lib
 
 	ld b, 60 : halt : djnz $-1
 
-	xor a : call lib.SetPage
-	ld hl, PART_WORMS
-	ld de, EXTERNAL_PART_START
-	call lib.Depack
 	include "src/pipeline.worms.asm"
 
 	ld b, 100 : halt : djnz $-1
@@ -95,6 +91,7 @@ page0s	module lib
 	ld b, 255 : halt : djnz $-1
 
 _tmp
+	include "src/pipeline.arcs.asm"
 
 	; STOP HERE
 	ifdef _MUSIC_
@@ -196,6 +193,11 @@ page1s
 PT3PLAY	include "lib/PTxPlay.asm"
 	incbin "res/nq-oops-intro-2.pt3"
 page1e	display /d, '[page 1] free: ', 65536 - $, ' (', $, ')'
+
+	define _page3 : page 3 : org #c000
+page3s	
+PART_ARCS	incbin "build/part.arcs.bin.zx0"
+page3e	display /d, '[page 3] free: ', 65536 - $, ' (', $, ')'
 
 	define _page7 : page 7 : org #db00
 page7s	
