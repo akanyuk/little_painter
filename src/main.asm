@@ -4,7 +4,7 @@
 
 	define EXTERNAL_PART_START #7500
 	; define _DEBUG_ 1
-	define _MUSIC_ 1
+	; define _MUSIC_ 1
 
 	define P_INTRO 4 ; "OUTSIDERS" intro
 	define P_TRACK 1 ; трек и плеер лежат здесь
@@ -30,6 +30,8 @@ page0s	module lib
 
 	call PART_INTRO
 	ld b, 20 : halt : djnz $-1
+
+_tmp
 
 	ld a, 7 : call lib.SetPage : call painter.Init
 	ld a, #01 : ld (PAINTER_STATE), a ; start painter animation
@@ -88,10 +90,16 @@ page0s	module lib
 	ld b, 200 : halt : djnz $-1
 	call EXTERNAL_PART_START + 6
 
-	ld b, 255 : halt : djnz $-1
+	ld b, 100 : halt : djnz $-1
 
-_tmp
 	include "src/pipeline.arcs.asm"
+
+	ld b, 100 : halt : djnz $-1
+
+	xor a : ld (PAINTER_STATE), a ; stop painter animation
+	ld a, 7 : call lib.SetPage : call painter.End
+
+	ld b, 100 : halt : djnz $-1
 
 	; STOP HERE
 	ifdef _MUSIC_
