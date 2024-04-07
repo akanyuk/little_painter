@@ -15,35 +15,41 @@ start
 	endmodule
 
 	di : ld sp, start
-	xor a : out #fe, a
+	ld a, 0 : out #fe, a
 	call lib.SetScreenAttr
 
 	ld a,#5c : ld i,a : ld hl,interr : ld (#5cff),hl : im 2 : ei
 
-	ld a, 2 : ld c, %01001111 : call A_PART_ARCS_INIT
-	ld b, 240 
-1	push bc
-	call A_PART_ARCS_MAIN
-	halt
-	pop bc : djnz 1b
-	
-	ld b, 50 : halt : djnz $-1
-
-	ld a, 2 : ld c, %01010111 : ld a, 4 : call A_PART_ARCS_INIT
-	ld bc, 320
-1	push bc
-	call A_PART_ARCS_MAIN
-	halt
-	pop bc 
-	dec bc : ld a, b : or c : jr nz, 1b
-
-
-	ld b, 100 : halt : djnz $-1
-
-	ld a, 8 : call A_PART_ARCS_INIT2
-1	call A_PART_ARCS_MAIN
-	halt
+	; painter placeholder
+	ld hl, ppPlaceholder
+1	ld a, (hl) : or a : jr z, _ppPlaceholder
+	inc hl
+	rst 16
 	jr 1b
+
+ppPlaceholder 	db 22, 1, 1, "Pocket Painter"
+	db 22, 2, 6, "Pocket Painter"
+	db 22, 3, 11, "Pocket Painter"
+	db 22, 4, 16, "Pocket Painter"
+	db 0
+_ppPlaceholder
+	ld hl, #5a80
+	ld de, #5a81
+	ld bc, #007f
+	ld (hl), %00101000
+	ldir
+
+ 	ld c, %01000001 : ld a, 25 : call A_PART_ARCS_INIT
+	ld bc, 100 : call A_PART_ARCS_MAIN
+	
+ 	ld c, %01001010 : ld a, 5 : call A_PART_ARCS_INIT
+	ld bc, 300 : call A_PART_ARCS_MAIN
+
+	ld a, 16 : call A_PART_ARCS_INIT2
+	ld bc, 800 : call A_PART_ARCS_MAIN
+
+	di : halt
+
 
 interr	ei : ret
 

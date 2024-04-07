@@ -1,4 +1,4 @@
-	dw #084b
+	dw #08cb
 	db %00000001
 	db #ff
 	db #c0
