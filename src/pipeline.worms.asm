@@ -11,18 +11,6 @@ A_PART_WORMS_SCENE5 	equ EXTERNAL_PART_START + 21
 	call lib.ClearScreen
 	ld a, %01000000 : call lib.SetScreenAttr
 
-	; painterPlaceholder
-	ld a, %01101000
-	ld (#5aff), a
-	ld (#5afe), a
-	ld (#5afd), a
-	ld (#5adf), a
-	ld (#5ade), a
-	ld (#5add), a
-	ld (#5abf), a
-	ld (#5abe), a
-	ld (#5abd), a
-
 	call A_PART_WORMS_INIT
 
 	call A_PART_WORMS_SCENE1

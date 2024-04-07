@@ -18,7 +18,7 @@ page0s	module lib
 
 	di : ld sp, page0s
 	xor a : out (#fe), a 
-	ld hl, #5800 : ld de, #5801 : ld bc, #02ff : ld (hl), a : ldir
+	ld hl, #4000 : ld de, #4001 : ld bc, #1aff : ld (hl), a : ldir
 	ld a,#5c : ld i,a : ld hl,interr : ld (#5cff),hl : im 2 : ei
 
 	call musicStart
@@ -31,20 +31,8 @@ page0s	module lib
 	call PART_INTRO
 	ld b, 20 : halt : djnz $-1
 
-	; painter placeholder
-	ld hl, ppPlaceholder
-1	ld a, (hl) : or a : jr z, _ppPlaceholder
-	inc hl : rst 16 : jr 1b
-ppPlaceholder 	db 22, 1, 1, "Pocket Painter"
-	db 22, 2, 6, "Pocket Painter"
-	db 22, 3, 11, "Pocket Painter"
-	db 22, 4, 16, "Pocket Painter"
-	db 0
-_ppPlaceholder
-	ld hl, #5a80 : ld de, #5a81 : ld bc, #007f : ld (hl), %00101000 : ldir
-	ld a, 7 : call lib.SetPage
-	ld hl, #4000 : ld de, #c000 : ld bc, #1b00 : ldir
-	ld a, 0 : call lib.SetPage
+	ld a, 7 : call lib.SetPage : call painter.Init
+	ld a, #01 : ld (PAINTER_STATE), a ; start painter animation
 
 	call PART_SCR1
 	ld b, 50 : halt : djnz $-1
@@ -107,6 +95,7 @@ _ppPlaceholder
 	ld b, 255 : halt : djnz $-1
 
 _tmp
+
 	; STOP HERE
 	ifdef _MUSIC_
 	ld a, P_TRACK : call lib.SetPage
@@ -141,6 +130,10 @@ interrCurrent	ret
 	nop
 	nop
 
+painterCurrent	ret
+	nop
+	nop
+
 interr	di
 	push af,bc,de,hl,ix,iy
 	exx : ex af, af'
@@ -160,6 +153,18 @@ MUSIC_STATE	equ $+1
 	ld bc, #7ffd : out (c), a
 1	
 	endif
+
+PAINTER_STATE	equ $+1	
+	ld a, #00 : or a : jr z, 1f
+	ld a, (lib.CUR_SCREEN) : ld b, a
+	ld a, 7 : or b : or %00010000
+	ld bc, #7ffd : out (c), a
+	call painter.Interrupts	
+	// Restore page
+	ld a, (lib.CUR_SCREEN) : ld b, a 
+	ld a, (lib.CUR_PAGE) : or b : or %00010000
+	ld bc, #7ffd : out (c), a
+1	
 
 	call interrCurrent
 
@@ -191,5 +196,12 @@ page1s
 PT3PLAY	include "lib/PTxPlay.asm"
 	incbin "res/nq-oops-intro-2.pt3"
 page1e	display /d, '[page 1] free: ', 65536 - $, ' (', $, ')'
+
+	define _page7 : page 7 : org #db00
+page7s	
+	module painter
+	include "src/painter.asm"
+	endmodule
+page7e	display /d, '[page 7] free: ', 65536 - $, ' (', $, ')'
 
 	include "src/builder.asm"
