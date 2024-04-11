@@ -77,36 +77,36 @@ player2Play	ld b, 12
 	align #100
 FRAME_STATES 	
 	; snake_anima1
-	db 0, low(player1.FRAMES) : dw #c000
-	db 0, low(player1.FRAMES) : dw #c008
-	db 0, low(player1.FRAMES) : dw #c010
-	db 0, low(player1.FRAMES) : dw #c018
+	db 0, low(player1.FRAMES) : dw #4000
+	db 0, low(player1.FRAMES) : dw #4008
+	db 0, low(player1.FRAMES) : dw #4010
+	db 0, low(player1.FRAMES) : dw #4018
 
-	db 0, low(player1.FRAMES) : dw #c800
-	db 0, low(player1.FRAMES) : dw #c808
-	db 0, low(player1.FRAMES) : dw #c810
-	db 0, low(player1.FRAMES) : dw #c818
+	db 0, low(player1.FRAMES) : dw #4800
+	db 0, low(player1.FRAMES) : dw #4808
+	db 0, low(player1.FRAMES) : dw #4810
+	db 0, low(player1.FRAMES) : dw #4818
 
-	db 0, low(player1.FRAMES) : dw #d000
-	db 0, low(player1.FRAMES) : dw #d008
-	db 0, low(player1.FRAMES) : dw #d010
-	db 0, low(player1.FRAMES) : dw #d018
+	db 0, low(player1.FRAMES) : dw #5000
+	db 0, low(player1.FRAMES) : dw #5008
+	db 0, low(player1.FRAMES) : dw #5010
+	db 0, low(player1.FRAMES) : dw #5018
 
 	; snake_anima2
-	db 0, low(player2.FRAMES) : dw #c000
-	db 0, low(player2.FRAMES) : dw #c008
-	db 0, low(player2.FRAMES) : dw #c010
-	db 0, low(player2.FRAMES) : dw #c018
+	db 0, low(player2.FRAMES) : dw #4000
+	db 0, low(player2.FRAMES) : dw #4008
+	db 0, low(player2.FRAMES) : dw #4010
+	db 0, low(player2.FRAMES) : dw #4018
 
-	db 0, low(player2.FRAMES) : dw #c800
-	db 0, low(player2.FRAMES) : dw #c808
-	db 0, low(player2.FRAMES) : dw #c810
-	db 0, low(player2.FRAMES) : dw #c818
+	db 0, low(player2.FRAMES) : dw #4800
+	db 0, low(player2.FRAMES) : dw #4808
+	db 0, low(player2.FRAMES) : dw #4810
+	db 0, low(player2.FRAMES) : dw #4818
 
-	db 0, low(player2.FRAMES) : dw #d000
-	db 0, low(player2.FRAMES) : dw #d008
-	db 0, low(player2.FRAMES) : dw #d010
-	db 0, low(player2.FRAMES) : dw #d018
+	db 0, low(player2.FRAMES) : dw #5000
+	db 0, low(player2.FRAMES) : dw #5008
+	db 0, low(player2.FRAMES) : dw #5010
+	db 0, low(player2.FRAMES) : dw #5018
 
 	module player1
  	include "snake_anima1/player.asm"

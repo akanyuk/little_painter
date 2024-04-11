@@ -1,6 +1,6 @@
 	device zxspectrum128
 
-	define DEBUG 1
+	; define DEBUG 1
 
 PART_START	equ  #7500
 
@@ -10,7 +10,7 @@ start	module lib
 	endmodule
 
 	di : ld sp, start
-	xor a : out #fe, a
+	ld a, 0 : out #fe, a
 
 	; painter placeholder
 	ld hl, ppPlaceholder
@@ -29,33 +29,22 @@ _ppPlaceholder
 
 	ld a,#5c, i,a, hl,interr, (#5cff),hl : im 2 : ei
 
-	ld a, 5 : call lib.SetPage
-	xor a : call lib.SetScreen
-	xor a : call lib.SetScreenAttrA
-	call lib.ClearScreenA
-
 	call PART_START ; hl - адрес процедуры на прерываниях
 	call interrStart	
-
 	call PART_START + 3
 
 	ld b, 160 : halt : djnz $-1
+	ld b, 160 : halt : djnz $-1
+	
+	ld b, 50 : call PART_START + 6
 
-	call interrStop
-	di : halt
+	jr $
 
 	; запуск нужной процедуры на прерываниях
 	; HL - адрес процедура
 interrStart	ld a, #cd : ld (interrCurrent), a ; call
 	ld a, l : ld (interrCurrent + 1), a
 	ld a, h : ld (interrCurrent + 2), a
-	ret
-
-	; остановка процедуры на прерываниях
-interrStop	xor a
-	ld (interrCurrent), a
-	ld (interrCurrent + 1), a
-	ld (interrCurrent + 2), a
 	ret
 
 interr	di
