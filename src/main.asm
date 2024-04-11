@@ -2,7 +2,7 @@
 
 	page 0
 
-	; define _DEBUG_ 1
+	define _DEBUG_ 1
 	; define _NOPAUSE_
 	; define _MUSIC_ 1
 	define EXTERNAL_PART_START #7500
@@ -21,16 +21,13 @@ page0s	module lib
 	call musicStart
 	ld hl, 0 : ld (INTS_COUNTER), hl
 
-	; jp _tmp
+	jp _tmp
 
-	ifndef _NOPAUSE_
-	ld b, 255 : halt : djnz $-1
-	endif
-
+	ifndef _NOPAUSE_ : ld b, 255 : halt : djnz $-1 : endif
 	call PART_INTRO
-	ld b, 20 : halt : djnz $-1
+	ifndef _NOPAUSE_ : ld b, 20 : halt : djnz $-1 : endif
 
-	ld a, 7 : call lib.SetPage : call painter.Init
+_tmp	ld a, 7 : call lib.SetPage : call painter.Init
 	ld a, #01 : ld (PAINTER_STATE), a ; start painter animation
 
 	include "src/pipeline.scr1.asm"
@@ -39,7 +36,7 @@ page0s	module lib
 
 	include "src/pipeline.arcs.asm"
 	include "src/pipeline.scr2.asm"
-_tmp	include "src/pipeline.sprms.asm"
+	include "src/pipeline.sprms.asm"
 	
 	ifndef _NOPAUSE_ : ld b, 100 : halt : djnz $-1 : endif
 

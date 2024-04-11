@@ -1,7 +1,19 @@
 Init	ld a, %00000101 : call SetScreenAttr
-                ld iy, TRANSITION0_DATA : call transition
+                ; ld iy, TRANSITION0_DATA : call transition
 	ld a, %00101101 : call SetScreenAttr
-	call ClearScreen
+
+	; TEMPORARY! Full bg
+	ld hl, FULL_BG
+	ld de, #5080
+	ld a, 32
+1	push af
+	push de
+	ld bc, 32
+	ldir
+	pop de
+	call lib.DownDE
+	pop af : dec a : jr nz, 1b
+
 	ld a, %00101000 : call SetScreenAttr
 
 	ld hl, #4000 : ld de, #c000 : ld bc, #1b00 : ldir
@@ -10,37 +22,8 @@ Init	ld a, %00000101 : call SetScreenAttr
 End	xor a : call lib.SetScreen
 	ld a, %00101101 : call SetScreenAttr
 	ld a, #ff : ld (FillScreen), a : call ClearScreen
-	xor a : ld (FillScreen), a	
 	ld a, %00000101 : call SetScreenAttr
 	ld iy, TRANSITION1_DATA : call transition
-	ret
-
-	; Процедура на прерываниях
-Interrupts	
-_is	ld a, 0 : inc a : and 7 : ld (_is + 1), a : or a : ret nz
-
-_i1	ld hl, #0000 : inc l : ld (_i1 + 1), hl
-	ld de, #549b
-	ld a, 24
-1	push af
-	push hl
-	push de
-	ld bc, 4 : ldir
-	
-	; move to alt screen
-	pop de
-	pop hl
-	push hl
-	push de
-	ld a, d : or #80 : ld d, a
-	ld bc, 4 : ldir
-
-	pop de
-	call lib.DownDE
-	pop hl
-	inc hl
-	pop af : dec a : jr nz, 1b
-	
 	ret
 
 ClearScreen	ld hl, #5080
@@ -61,4 +44,59 @@ SetScreenAttr
 	ld hl, #5a80 : ld de, #5a81 : ld bc, #007f : ld (hl), a : ldir
 	ret
 
-	include "src/painter_transitions.asm"
+transition	include "src/painter_transitions.asm"
+
+	; Процедура на прерываниях
+Interrupts	
+_is	ld a, 0 : inc a : and 7 : ld (_is + 1), a : or a : ret nz
+
+rrSpriteStage	equ $+1
+	ld a, 7 : inc a : and 7 : ld (rrSpriteStage), a
+	or a : jr nz, 1f
+	call fillSpriteBuf
+	jr 2f
+1	call rrSpriteBuf
+2	call dispSpriteBuf
+	ret
+
+fillSpriteBuf	ld hl, SPRITE1
+	ld de, SPRITE_BUF
+	ld bc, 32*6
+	ldir
+	ret
+
+rrSpriteBuf	
+	ld hl, SPRITE_BUF
+	ld a, 32
+1	scf : ccf ; reset carry
+	dup 3
+	rr (hl) : inc hl
+	edup
+	scf : ccf ; reset carry
+	dup 3
+	rr (hl) : inc hl
+	edup
+	dec a : jr nz, 1b
+	ret
+
+dispSpriteBuf	ld a, (_dispSprAddr) : res 7, a : ld (_dispSprAddr), a
+	call _dispSpriteBuf
+	ld a, (_dispSprAddr) : set 7, a : ld (_dispSprAddr), a
+_dispSpriteBuf	ld hl, SPRITE_BUF
+_dispSprAddr	equ $+2
+	ld de, #5280
+	ld a, 30
+1	push af
+	push de	
+	ldi : ldi : ldi
+	inc hl : inc hl : inc hl
+	pop de 
+	call lib.DownDE
+	pop af
+	dec a
+	jr nz, 1b
+
+SPRITE_BUF	block 32*6
+
+FULL_BG	incbin "res/picasso/bg_full.bin"
+SPRITE1	incbin "res/picasso/sprite1.bin"
