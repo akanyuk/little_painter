@@ -27,88 +27,23 @@ page0s	module lib
 	; jp _tmp
 
 	ld b, 255 : halt : djnz $-1
-
 	call PART_INTRO
 	ld b, 20 : halt : djnz $-1
 
 	ld a, 7 : call lib.SetPage : call painter.Init
 	ld a, #01 : ld (PAINTER_STATE), a ; start painter animation
 
-	call PART_SCR1
-	ld b, 50 : halt : djnz $-1
-	call PART_SCR1 + 3
-	ld b, 200 : halt : djnz $-1
-	call PART_SCR1 + 6
-
+	include "src/pipeline.scr2.asm"
 	ld b, 40 : halt : djnz $-1
-
-	ld hl, PART_SPRMS
-	ld de, EXTERNAL_PART_START
-	call lib.Depack
-
-	ld a, 5 : call lib.SetPage
-	xor a : call lib.SetScreen
-	xor a : call lib.SetScreenAttrA
-	call lib.ClearScreenA
-
-	call EXTERNAL_PART_START ; hl - адрес процедуры на прерываниях
-	call interrStart	
-	call EXTERNAL_PART_START + 3
-	ld b, 160 : halt : djnz $-1
-	call interrStop
-
-	xor a : call lib.SetPage
-	ld hl, PART_SCR2
-	ld de, EXTERNAL_PART_START
-	call lib.Depack
-
-	xor a : call lib.SetScreen
-
-	call EXTERNAL_PART_START
-	call EXTERNAL_PART_START + 3
-	ld b, 200 : halt : djnz $-1
-	call EXTERNAL_PART_START + 6
-
-	ld b, 60 : halt : djnz $-1
-
-	include "src/pipeline.worms.asm"
-
-	ld b, 100 : halt : djnz $-1
-	call lib.ClearScreen
-
-	xor a : call lib.SetPage
-	ld hl, PART_SCR3
-	ld de, EXTERNAL_PART_START
-	call lib.Depack
-	
-	xor a : call lib.SetScreen
-
-	call EXTERNAL_PART_START
-	call EXTERNAL_PART_START + 3
-	ld b, 200 : halt : djnz $-1
-	call EXTERNAL_PART_START + 6
-
-	call lib.ClearScreen
-
-	ld b, 100 : halt : djnz $-1
-
 	include "src/pipeline.arcs.asm"
-
-_tmp
-	xor a : call lib.SetPage
-	ld hl, PART_SCR4
-	ld de, EXTERNAL_PART_START
-	call lib.Depack
-
-	xor a : call lib.SetScreen
-
-	call EXTERNAL_PART_START
-	call EXTERNAL_PART_START + 3
+	include "src/pipeline.scr1.asm"
+	include "src/pipeline.sprms.asm"
 	ld b, 100 : halt : djnz $-1
-	call EXTERNAL_PART_START + 6
-	ld b, 30 : halt : djnz $-1
-	call EXTERNAL_PART_START + 9
-
+	include "src/pipeline.worms.asm"
+	include "src/pipeline.scr3.asm"
+	ld b, 100 : halt : djnz $-1
+	include "src/pipeline.scr4.asm"
+_tmp
 	ld b, 100 : halt : djnz $-1
 
 	xor a : ld (PAINTER_STATE), a ; stop painter animation
@@ -199,17 +134,8 @@ INTS_COUNTER	equ $+1
 	ei
 	ret
 
-	display /d, '[page 0] bytes before overlap external parts: ', EXTERNAL_PART_START - $
-
-	org EXTERNAL_PART_START
 PART_INTRO	include "part.intro/part.intro.asm"
-PART_SCR1	include "part.scr1/part.scr1.asm"
-PART_SPRMS	incbin "build/part.sprms.bin.zx0"
-PART_SCR2	incbin "build/part.scr2.bin.zx0"
-PART_WORMS	incbin "build/part.worms.bin.zx0"
-PART_SCR3	incbin "build/part.scr3.bin.zx0"
-PART_SCR4	incbin "build/part.scr4.bin.zx0"
-
+PART_SCR2	include "part.scr2/part.scr2.asm"
 page0e	display /d, '[page 0] free: ', #ffff - $, ' (', $, ')'	
 
 	define _page1 : page 1 : org #c000
@@ -221,7 +147,16 @@ page1e	display /d, '[page 1] free: ', 65536 - $, ' (', $, ')'
 	define _page3 : page 3 : org #c000
 page3s	
 PART_ARCS	incbin "build/part.arcs.bin.zx0"
+PART_SCR1	incbin "build/part.scr1.bin.zx0"
+PART_SCR3	incbin "build/part.scr3.bin.zx0"
+PART_SCR4	incbin "build/part.scr4.bin.zx0"
 page3e	display /d, '[page 3] free: ', 65536 - $, ' (', $, ')'
+
+	define _page4 : page 4 : org #c000
+page4s	
+PART_SPRMS	incbin "build/part.sprms.bin.zx0"
+PART_WORMS	incbin "build/part.worms.bin.zx0"
+page4e	display /d, '[page 4] free: ', 65536 - $, ' (', $, ')'
 
 	define _page7 : page 7 : org #db00
 page7s	

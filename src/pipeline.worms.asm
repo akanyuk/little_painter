@@ -1,4 +1,4 @@
-	xor a : call lib.SetPage
+	ld a, 4 : call lib.SetPage
 	ld hl, PART_WORMS
 	ld de, EXTERNAL_PART_START
 	call lib.Depack
