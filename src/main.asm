@@ -2,14 +2,11 @@
 
 	page 0
 
-	define EXTERNAL_PART_START #7500
 	; define _DEBUG_ 1
-	define _MUSIC_ 1
-
-	define P_INTRO 4 ; "OUTSIDERS" intro
-	define P_TRACK 1 ; трек и плеер лежат здесь
-	define P_START_SCR 7
-
+	; define _NOPAUSE_
+	; define _MUSIC_ 1
+	define EXTERNAL_PART_START #7500
+	define P_TRACK 1 ; track and player here
 	org #6000
 
 page0s	module lib
@@ -26,30 +23,39 @@ page0s	module lib
 
 	; jp _tmp
 
+	ifndef _NOPAUSE_
 	ld b, 255 : halt : djnz $-1
+	endif
+
 	call PART_INTRO
 	ld b, 20 : halt : djnz $-1
 
 	ld a, 7 : call lib.SetPage : call painter.Init
 	ld a, #01 : ld (PAINTER_STATE), a ; start painter animation
 
-	include "src/pipeline.scr2.asm"
-	ld b, 40 : halt : djnz $-1
-	include "src/pipeline.arcs.asm"
 	include "src/pipeline.scr1.asm"
-	include "src/pipeline.sprms.asm"
-	ld b, 100 : halt : djnz $-1
-	include "src/pipeline.worms.asm"
+
+	ifndef _NOPAUSE_ : ld b, 40 : halt : djnz $-1 :	endif
+
+	include "src/pipeline.arcs.asm"
+	include "src/pipeline.scr2.asm"
+_tmp	include "src/pipeline.sprms.asm"
+	
+	ifndef _NOPAUSE_ : ld b, 100 : halt : djnz $-1 : endif
+
 	include "src/pipeline.scr3.asm"
-	ld b, 100 : halt : djnz $-1
+	include "src/pipeline.worms.asm"
+
+	ifndef _NOPAUSE_ : ld b, 100 : halt : djnz $-1 : endif
+
 	include "src/pipeline.scr4.asm"
-_tmp
-	ld b, 100 : halt : djnz $-1
+
+	ifndef _NOPAUSE_ : ld b, 100 : halt : djnz $-1 : endif
 
 	xor a : ld (PAINTER_STATE), a ; stop painter animation
 	ld a, 7 : call lib.SetPage : call painter.End
 
-	ld b, 100 : halt : djnz $-1
+	ifndef _NOPAUSE_ : ld b, 100 : halt : djnz $-1 : endif
 
 	; STOP HERE
 	ifdef _MUSIC_
@@ -134,8 +140,12 @@ INTS_COUNTER	equ $+1
 	ei
 	ret
 
+	display /d, 'Free page pefore EXTERNAL_PART_START: ', EXTERNAL_PART_START - $
+
 PART_INTRO	include "part.intro/part.intro.asm"
-PART_SCR2	include "part.scr2/part.scr2.asm"
+PART_SCR1	include "part.scr1/part.scr1.asm"
+	org #c000 + 4000
+PART_SPRMS	incbin "build/part.sprms.bin.zx0"
 page0e	display /d, '[page 0] free: ', #ffff - $, ' (', $, ')'	
 
 	define _page1 : page 1 : org #c000
@@ -147,16 +157,11 @@ page1e	display /d, '[page 1] free: ', 65536 - $, ' (', $, ')'
 	define _page3 : page 3 : org #c000
 page3s	
 PART_ARCS	incbin "build/part.arcs.bin.zx0"
-PART_SCR1	incbin "build/part.scr1.bin.zx0"
+PART_SCR2	incbin "build/part.scr2.bin.zx0"
 PART_SCR3	incbin "build/part.scr3.bin.zx0"
 PART_SCR4	incbin "build/part.scr4.bin.zx0"
-page3e	display /d, '[page 3] free: ', 65536 - $, ' (', $, ')'
-
-	define _page4 : page 4 : org #c000
-page4s	
-PART_SPRMS	incbin "build/part.sprms.bin.zx0"
 PART_WORMS	incbin "build/part.worms.bin.zx0"
-page4e	display /d, '[page 4] free: ', 65536 - $, ' (', $, ')'
+page3e	display /d, '[page 3] free: ', 65536 - $, ' (', $, ')'
 
 	define _page7 : page 7 : org #db00
 page7s	

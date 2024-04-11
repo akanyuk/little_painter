@@ -6,8 +6,9 @@
 	ld hl, #5810 : ld a, %01111111 : call fillAttr8x8	
 	pop bc : push bc : halt : djnz $-1
 	ld hl, #5808 : ld a, %01111111 : call fillAttr8x8	
-	pop bc : halt : djnz $-1
+	pop bc : push bc : halt : djnz $-1
 	ld hl, #5800 : ld a, %01111111 : call fillAttr8x8	
+	pop af : sra a : ld b, a : halt : djnz $-1
 	ld hl, #5818 : ld a, %01111111 : call fillAttr8x8	
 	ret
 

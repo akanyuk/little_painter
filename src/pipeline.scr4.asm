@@ -7,7 +7,7 @@
 
 	call EXTERNAL_PART_START
 	call EXTERNAL_PART_START + 3
-	ld b, 100 : halt : djnz $-1
+	ifndef _NOPAUSE_ : ld b, 100 : halt : djnz $-1 : endif
 	call EXTERNAL_PART_START + 6
-	ld b, 30 : halt : djnz $-1
+	ifndef _NOPAUSE_ : ld b, 30 : halt : djnz $-1 : endif
 	call EXTERNAL_PART_START + 9

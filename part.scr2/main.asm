@@ -31,8 +31,6 @@ _ppPlaceholder
 	ld b, 200 : halt : djnz $-1
 	call PART_START + 6
 
-	xor a : out (#fe), a
-
 	di : halt
 
 	org PART_START

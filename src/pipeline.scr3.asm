@@ -3,11 +3,9 @@
 	ld de, EXTERNAL_PART_START
 	call lib.Depack
 	
-	xor a : call lib.SetScreen
-
 	call EXTERNAL_PART_START
 	call EXTERNAL_PART_START + 3
-	ld b, 200 : halt : djnz $-1
+	ifndef _NOPAUSE_ : ld b, 200 : halt : djnz $-1 : endif
 	call EXTERNAL_PART_START + 6
 
 	call lib.ClearScreen
