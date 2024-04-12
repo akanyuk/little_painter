@@ -15,13 +15,12 @@
 main	ld hl, BG1 : ld de, #4000 : ld a, 160 : call dispBG
 	ld de, #5800 : ld bc, 32*20 : ldir
 
-	ld b, 120 : halt : djnz $-1
+	; ld b, 120 : halt : djnz $-1
 
 	ld a, 2 : ld bc, 0*256 + 1 : call PLAYER + 3
-	ld a, 2 + 12 : ld bc, 2*256 + 1 : call PLAYER + 3
+	ld b, 160 : halt : djnz $-1
+	ld a, 2 + 12 : ld bc, 1*256 + 1 : call PLAYER + 3
 
-	ld b, 160 : halt : djnz $-1
-	ld b, 160 : halt : djnz $-1
 	ld b, 160 : halt : djnz $-1
 
 	; phase 2
@@ -30,9 +29,8 @@ main	ld hl, BG1 : ld de, #4000 : ld a, 160 : call dispBG
 	ld de, #5800 : ld bc, 32*16 : ldir
 
 	ld a, 1 : ld bc, 0*256 + 1 : call PLAYER + 3
-	ld a, 1 + 12 : ld bc, 2*256 + 1 : call PLAYER + 3
+	ld a, 1 + 12 : ld bc, 1*256 + 1 : call PLAYER + 3
 
-	ld b, 160 : halt : djnz $-1
 	ld b, 160 : halt : djnz $-1
 
 	; phase 3
@@ -45,10 +43,18 @@ main	ld hl, BG1 : ld de, #4000 : ld a, 160 : call dispBG
 	ld de, #5900 : ld bc, 32*12 : ldir
 
 	ld a, 0 : ld bc, 0*256 + 1 : call PLAYER + 3
-	ld a, 0 + 12 : ld bc, 2*256 + 1 : call PLAYER + 3
+	ld a, 0 + 12 : ld bc, 1*256 + 1 : call PLAYER + 3
 
 	ld a, 3 : ld bc, 0*256 + 1 : call PLAYER + 3
-	ld a, 3 + 12 : ld bc, 2*256 + 1 : call PLAYER + 3
+	ld a, 3 + 12 : ld bc, 1*256 + 1 : call PLAYER + 3
+
+	ld b, 160 : halt : djnz $-1
+
+	ld a, 2 + 12 : ld bc, 5*256 + 1 : call PLAYER + 3
+	ld a, 1 + 12 : ld bc, 4*256 + 1 : call PLAYER + 3
+	ld a, 3 + 12 : ld bc, 6*256 + 1 : call PLAYER + 3
+	ld a, 0 + 12 : ld bc, 5*256 + 1 : call PLAYER + 3
+
 	ret
 
 	; hl: screen address
