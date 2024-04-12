@@ -3,9 +3,9 @@
 	page 0
 
 	define _DEBUG_ 1
-	define _NOPAUSE_
-	; define _MUSIC_ 1
-	; define _PAINTER_
+	; define _NOPAUSE_
+	define _MUSIC_ 1
+	define _PAINTER_
 	; define _PAINTER_ONLY_
 
 	define EXTERNAL_PART_START #7500
@@ -20,8 +20,6 @@ page0s	module lib
 	xor a : out (#fe), a 
 	ld hl, #4000 : ld de, #4001 : ld bc, #1aff : ld (hl), a : ldir
 	ld a,#5c : ld i,a : ld hl,interr : ld (#5cff),hl : im 2 : ei
-
-	jp _tmp
 
 	call musicStart
 	ld hl, 0 : ld (INTS_COUNTER), hl
@@ -43,7 +41,7 @@ page0s	module lib
 
 	ifndef _NOPAUSE_ : ld b, 40 : halt : djnz $-1 :	endif
 
-_tmp	include "src/pipeline.arcs.asm"
+	include "src/pipeline.arcs.asm"
 	include "src/pipeline.scr2.asm"
 	include "src/pipeline.sprms.asm"
 	
@@ -163,11 +161,15 @@ page1e	display /d, '[page 1] free: ', 65536 - $, ' (', $, ')'
 
 	define _page3 : page 3 : org #c000
 page3s	
-PART_ARCS	incbin "build/part.arcs.bin.zx0"
 PART_SCR2	incbin "build/part.scr2.bin.zx0"
 PART_SCR3	incbin "build/part.scr3.bin.zx0"
 PART_SCR4	incbin "build/part.scr4.bin.zx0"
 page3e	display /d, '[page 3] free: ', 65536 - $, ' (', $, ')'
+
+	define _page4 : page 4 : org #c000 + 6000
+page4s	
+PART_ARCS	incbin "build/part.arcs.bin.zx0"
+page4e	display /d, '[page 4] free: ', 65536 - $, ' (', $, ')'
 
 	define _page7 : page 7 : org #db00
 page7s	
