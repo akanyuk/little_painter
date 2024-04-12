@@ -48,7 +48,11 @@ transition	include "src/painter_transitions.asm"
 
 	; Процедура на прерываниях
 Interrupts	
-_is	ld a, 0 : inc a : and 7 : ld (_is + 1), a : or a : ret nz
+	ld a, (INTS_COUNTER) : and 7
+	cp 1 : jp z, fillSpriteBuf
+	cp 2 : jp z, rrSpriteBuf
+	cp 3 : jp z, dispSpriteBuf
+	ret
 
 rrSpriteStage	equ $+1
 	ld a, 7 : inc a : and 7 : ld (rrSpriteStage), a
@@ -59,7 +63,7 @@ rrSpriteStage	equ $+1
 2	call dispSpriteBuf
 	ret
 
-fillSpriteBuf	ld hl, SPRITE1
+fillSpriteBuf	ld hl, SPR_MV_R_2X4
 	ld de, SPRITE_BUF
 	ld bc, 32*6
 	ldir
@@ -99,4 +103,4 @@ _dispSprAddr	equ $+2
 SPRITE_BUF	block 32*6
 
 FULL_BG	incbin "res/picasso/bg_full.bin"
-SPRITE1	incbin "res/picasso/sprite1.bin"
+SPR_MV_R_2X4	incbin "res/picasso/sprite1.bin"

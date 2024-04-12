@@ -1,6 +1,8 @@
-	jp init     		; $+0   
-	jp init2     		; $+3 
-	; $+6  
+	jp initAnima   		; $+0
+	jp init1     		; $+3   
+	jp init2     		; $+6 
+	jp init3     		; $+9
+	; $+12
 1	push bc
 	call play : halt
 	pop bc 
@@ -17,41 +19,49 @@
 	djnz 2b
 	ret
 	
-	; a - Сдвиг в анимации между линиями
-	; c - background color
-init	call initLineStep
-	ld a, c : call lib.SetScreenAttr
-	push af
-	ld hl, SDATA1 : call transition1
-	halt
-	pop af
+init1	ld a, %00000101  : call lib.SetScreenAttr
 	
-	; paper -> inc
-	and %00000111 : push af : rla : rla : rla : pop bc : or b : or %01000000
-	push af
-	call lib.SetScreenAttr
-	call lib.ClearScreen
-	pop af 
-	and %11111000 : or %00000111
-	call lib.SetScreenAttr
+	ld hl, L5LAT/2 + LLAT2 * 7 + 10
+	ld (transStages), hl	
+	ld hl, SDATA1 : call transition1
 
+	ld a, %00101101 : call lib.SetScreenAttr
+	call lib.ClearScreen
+	ld a, %00101000 : call lib.SetScreenAttr
+	call lib.SetScreenAttr
 	ret
 
-	; a - Сдвиг в анимации между линиями
-init2	call initLineStep
-	ld a, %01010010
-	call lib.SetScreenAttr
+init2	ld a, %0101101 : call lib.SetScreenAttr
 	call fillScreen
-	ld a, %01000010
+	ld a, %00000101
 	call lib.SetScreenAttr
+
+	ld hl, L8LAT + LLAT * 4 + 16
+	ld (transStages), hl
 	ld hl, SDATA2 : call transition1
-	xor a
-	call lib.SetScreenAttr	
+	ret
+
+init3	ld a, %00000001 : call lib.SetScreenAttr
+
+	ld hl, L4LAT + LLAT3 * 4 + 16
+	ld (transStages), hl
+	ld hl, SDATA3 : call transition1
+
+	ld a, %00001001 : call lib.SetScreenAttr
 	call lib.ClearScreen
 	ld hl, bg1 : ld de, #5800 : ld bc, 512+(32*4) : ldir
+
+	ld b, 56
+1	push bc
+	call dispBgOut
+	halt
+	pop bc
+	djnz 1b
+
 	ret
 
-initLineStep	ld b, a
+	; a - Сдвиг в анимации между линиями
+initAnima	ld b, a
 	add a
 	ld (LINES_STATE + 3), a
 	add b : ld (LINES_STATE + 7), a
@@ -88,7 +98,32 @@ _fillScreenA	ld (hl), #ff
 	pop af : dec a : jr nz, 1b
 	ret
 
+dispBgOut	ld hl, bgOut + (32 * 8 * 14) - (32*2)
+	ld de, #4000
+_dispBgOutA	ld a, 2
+1	push af
+	push de
+	ld bc, #0020
+	ldir
+	pop de
+	call lib.DownDE
+	pop af
+	dec a
+	jr nz, 1b
+	
+	ld hl, (dispBgOut + 1)
+	ld de, 32*2
+	sbc hl, de
+	ld (dispBgOut + 1), hl
+	
+	ld a, (_dispBgOutA + 1)
+	add 2
+	ld (_dispBgOutA + 1), a
+
+	ret
+
 transition1	include "transition.asm"
 play	include "memsave-player.asm"	
-bg1	incbin "res/bg4.scr", 6144
+bg1	incbin "res/bg5.scr", 6144
+bgOut	incbin "res/bg-out.bin"
 

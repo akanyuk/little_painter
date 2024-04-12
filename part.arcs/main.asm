@@ -4,10 +4,6 @@
 	; define DEBUG 1
 
 A_PART_ARCS  	equ #7500
-A_PART_ARCS_INIT 	equ A_PART_ARCS
-A_PART_ARCS_INIT2 	equ A_PART_ARCS + 3
-A_PART_ARCS_MAIN   	equ A_PART_ARCS + 6
-
 	org #6000
 start
 	module lib
@@ -39,14 +35,26 @@ _ppPlaceholder
 	ld (hl), %00101000
 	ldir
 
- 	ld c, %01000001 : ld a, 25 : call A_PART_ARCS_INIT
-	ld bc, 100 : call A_PART_ARCS_MAIN
+	call A_PART_ARCS + 3
+ 	ld a, 25 : call A_PART_ARCS
+	ld bc, 100 : call A_PART_ARCS + 12
 	
- 	ld c, %01001010 : ld a, 5 : call A_PART_ARCS_INIT
-	ld bc, 300 : call A_PART_ARCS_MAIN
+	call A_PART_ARCS + 6
+	ld a, %01000110 : call lib.SetScreenAttr	
+ 	ld a, 6 : call A_PART_ARCS
+	ld bc, 20 : call A_PART_ARCS + 12	
 
-	ld a, 16 : call A_PART_ARCS_INIT2
-	ld bc, 800 : call A_PART_ARCS_MAIN
+	ld a, %01000111 : call lib.SetScreenAttr	
+ 	ld a, 4 : call A_PART_ARCS
+	ld bc, 20 : call A_PART_ARCS + 12	
+
+	ld a, %01000011 : call lib.SetScreenAttr	
+ 	ld a, 2 : call A_PART_ARCS
+	ld bc, 20 : call A_PART_ARCS + 12	
+
+	ld a, 16 : call A_PART_ARCS
+	call A_PART_ARCS + 9
+	ld bc, 800 : call A_PART_ARCS + 12
 
 	di : halt
 

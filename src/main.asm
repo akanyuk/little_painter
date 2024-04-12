@@ -30,6 +30,8 @@ page0s	module lib
 _tmp	ld a, 7 : call lib.SetPage : call painter.Init
 	ld a, #01 : ld (PAINTER_STATE), a ; start painter animation
 
+	jr $
+	
 	include "src/pipeline.scr1.asm"
 
 	ifndef _NOPAUSE_ : ld b, 40 : halt : djnz $-1 :	endif
