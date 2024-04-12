@@ -35,23 +35,37 @@ nearJmp         res	6,c
 nextFrame       ld	(play+1),de
                 ret
 
-	module movingRightV1
-FRAME_0000	include "moving-right-v1/0000.asm"        
-FRAME_0001	include "moving-right-v1/0001.asm"
-FRAME_0002	include "moving-right-v1/0002.asm"
-FRAME_0003	include "moving-right-v1/0003.asm"
-FRAME_0004	include "moving-right-v1/0004.asm"
-FRAME_0005	include "moving-right-v1/0005.asm"
-FRAME_0006	include "moving-right-v1/0006.asm"
-FRAME_0007	include "moving-right-v1/0007.asm"
-FRAME_0008	include "moving-right-v1/0008.asm"
-FRAME_0009	include "moving-right-v1/0009.asm"
-FRAME_000a	include "moving-right-v1/000a.asm"
-FRAME_000b	include "moving-right-v1/000b.asm"
-FRAME_000c	include "moving-right-v1/000c.asm"
-FRAME_000d	include "moving-right-v1/000d.asm"
-FRAME_000e	include "moving-right-v1/000e.asm"
-FRAME_000f	include "moving-right-v1/000f.asm"
-; FRAME_0010	include "moving-right-v1/0010.asm"
+
+	        module movingRightFast
+FRAME_0000	include "moving-right-fast/0000.asm"
+FRAME_0001	include "moving-right-fast/0001.asm"
+FRAME_0002	include "moving-right-fast/0002.asm"
+FRAME_0003	include "moving-right-fast/0003.asm"
+FRAME_0004	include "moving-right-fast/0004.asm"
+FRAME_0005	include "moving-right-fast/0005.asm"
+FRAME_0006	include "moving-right-fast/0006.asm"
+FRAME_0007	include "moving-right-fast/0007.asm"
+FRAME_0008	include "moving-right-fast/0008.asm"
 FRAME_END
-        endmodule
+                endmodule
+
+	        module movingRight
+FRAME_0000	include "moving-right/0000.asm"        
+FRAME_0001	include "moving-right/0001.asm"
+FRAME_0002	include "moving-right/0002.asm"
+FRAME_0003	include "moving-right/0003.asm"
+FRAME_0004	include "moving-right/0004.asm"
+FRAME_0005	include "moving-right/0005.asm"
+FRAME_0006	include "moving-right/0006.asm"
+FRAME_0007	include "moving-right/0007.asm"
+FRAME_0008	include "moving-right/0008.asm"
+FRAME_0009	include "moving-right/0009.asm"
+FRAME_000a	include "moving-right/000a.asm"
+FRAME_000b	include "moving-right/000b.asm"
+FRAME_000c	include "moving-right/000c.asm"
+FRAME_000d	include "moving-right/000d.asm"
+FRAME_000e	include "moving-right/000e.asm"
+FRAME_000f	include "moving-right/000f.asm"
+; FRAME_0010	include "moving-right/0010.asm"
+FRAME_END
+                endmodule

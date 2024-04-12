@@ -2,9 +2,9 @@
 
 	page 0
 
-	define _DEBUG_ 1
+	; define _DEBUG_ 1
 	; define _NOPAUSE_
-	define _MUSIC_ 1
+	; define _MUSIC_ 1
 	define _PAINTER_
 	; define _PAINTER_ONLY_
 

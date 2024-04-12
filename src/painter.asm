@@ -1,6 +1,6 @@
 Init	
 	ld a, %00000101 : call SetScreenAttr
-                ld iy, TRANSITION0_DATA : call transition
+                ld iy, TRANSITION0_DATA : call Transition
 	ld a, %00101101 : call SetScreenAttr
 	xor a : ld (FillScreenBy), a : call FillScreen
 	ld a, %00101000 : call SetScreenAttr
@@ -11,7 +11,7 @@ End	xor a : call lib.SetScreen
 	ld a, %00101101 : call SetScreenAttr
 	ld a, #ff : ld (FillScreenBy), a : call FillScreen
 	ld a, %00000101 : call SetScreenAttr
-	ld iy, TRANSITION1_DATA : call transition
+	ld iy, TRANSITION1_DATA : call Transition
 	ret
 
 FillScreen	ld hl, #5080
@@ -30,9 +30,7 @@ FillScreenBy	equ $+1
 SetScreenAttr	ld hl, #5a80 : ld de, #5a81 : ld bc, #007f : ld (hl), a : ldir
 	ret
 
-transition	include "src/painter_transitions.asm"
-
-copyAltScr
+CopyAltScr
 	ld hl, #5080
 	ld de, #d080	
 	ld a, 32
@@ -48,25 +46,9 @@ copyAltScr
 	jr nz, 1b
 	ret
 
-	; Процедура на прерываниях
-Interrupts	ld a, (INTS_COUNTER) : and 7 : cp 1 : jp z, copyAltScr : or a : ret nz
-	
-	
-moveRight	ld a, #ff : inc a : and #0f : ld (moveRight + 1), a
-	or a : jr nz, _mrAddr
+Interrupts	include "painter_interrupts.asm"
+Transition	include "src/painter_transitions.asm"
 
-	ld hl, movingRightV1.FRAME_0000
-	ld (playerReset), hl
-
-	ld a, (_mrAddr + 1)
-	inc a 
-	cp #9e
-	jr nz, 1f
-	xor a : ld (FillScreenBy), a : call FillScreen
-	ld a, #80
-1	ld (_mrAddr + 1), a
-
-_mrAddr	ld de, #507f
-	jp play
-
+	module slow_player
 	include "res/painter-sprites/player.asm"
+	endmodule

@@ -1,127 +1,127 @@
 	dw #0020
 	db %00000010
-	db #e0
-	db #7f
-	db #ff
-	db %01011100
-	db %00000010
-	db #87
 	db #1f
-	db #ff
-	db %01011100
-	db %00000010
-	db #e0
-	db #7f
-	db #ff
-	db %10110000
-	db %01111100
-	db %00000010
-	db #ef
-	db #7f
-	db #ff
-	db %01011100
-	db %00000010
-	db #87
-	db #1f
-	db #ff
-	db %01011100
-	db %00000010
-	db #e0
-	db #7f
-	db #ff
-	db %10110000
-	db %01111100
-	db %00000010
-	db #ea
-	db #7f
-	db #ff
-	db %01011100
-	db %00000010
 	db #80
-	db #1f
-	db #ff
+	db #00
 	db %01011100
 	db %00000010
+	db #78
 	db #e0
-	db #7f
-	db #ff
-	db %10110000
-	db %01111100
-	db %00000010
-	db #ef
-	db #7f
-	db #ff
+	db #00
 	db %01011100
 	db %00000010
-	db #87
 	db #1f
-	db #ff
+	db #80
+	db #00
+	db %10110000
+	db %01111100
+	db %00000010
+	db #10
+	db #80
+	db #00
 	db %01011100
 	db %00000010
+	db #78
 	db #e0
-	db #7f
-	db #ff
+	db #00
+	db %01011100
+	db %00000010
+	db #1f
+	db #80
+	db #00
 	db %10110000
 	db %01111100
 	db %00000010
-	db #e6
-	db #7f
-	db #ff
+	db #15
+	db #80
+	db #00
 	db %01011100
 	db %00000010
-	db #b0
-	db #5f
-	db #ff
+	db #7f
+	db #e0
+	db #00
 	db %01011100
 	db %00000010
-	db #e2
-	db #7f
-	db #ff
+	db #1f
+	db #80
+	db #00
 	db %10110000
 	db %01111100
 	db %00000010
+	db #10
+	db #80
+	db #00
+	db %01011100
+	db %00000010
+	db #78
+	db #e0
+	db #00
+	db %01011100
+	db %00000010
+	db #1f
+	db #80
+	db #00
+	db %10110000
+	db %01111100
+	db %00000010
+	db #19
+	db #80
+	db #00
+	db %01011100
+	db %00000010
+	db #4f
+	db #a0
+	db #00
+	db %01011100
+	db %00000010
+	db #1d
+	db #80
+	db #00
+	db %10110000
+	db %01111100
+	db %00000010
+	db #3f
 	db #c0
-	db #3f
-	db #ff
+	db #00
 	db %01011100
 	db %00000010
+	db #3f
 	db #c0
-	db #3f
-	db #ff
+	db #00
 	db %01011100
 	db %00000010
-	db #ed
-	db #bf
-	db #ff
+	db #12
+	db #40
+	db #00
 	db %10110000
 	db %01111100
 	db %00000010
-	db #87
+	db #78
+	db #e0
+	db #00
+	db %01011100
+	db %00000010
 	db #1f
-	db #ff
+	db #80
+	db #00
 	db %01011100
 	db %00000010
-	db #e0
-	db #7f
-	db #ff
-	db %01011100
-	db %00000010
-	db #e0
-	db #3f
-	db #ff
+	db #1f
+	db #c0
+	db #00
 	db %10110000
 	db %01011100
 	db %00000001
-	db #f0
-	db #ff
+	db #0f
+	db #00
 	db %01011101
 	db %00000010
-	db #87
-	db #1f
-	db #ff
+	db #78
+	db #e0
+	db #00
 	db %01011100
 	db %00000010
-	db #e0
-	db #7f
-	db #ff
+	db #1f
+	db #80
+	db #00
 	db %11111111
