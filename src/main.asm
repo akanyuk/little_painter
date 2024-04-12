@@ -3,8 +3,11 @@
 	page 0
 
 	define _DEBUG_ 1
-	; define _NOPAUSE_
+	define _NOPAUSE_
 	; define _MUSIC_ 1
+	; define _PAINTER_
+	; define _PAINTER_ONLY_
+
 	define EXTERNAL_PART_START #7500
 	define P_TRACK 1 ; track and player here
 	org #6000
@@ -18,25 +21,29 @@ page0s	module lib
 	ld hl, #4000 : ld de, #4001 : ld bc, #1aff : ld (hl), a : ldir
 	ld a,#5c : ld i,a : ld hl,interr : ld (#5cff),hl : im 2 : ei
 
+	jp _tmp
+
 	call musicStart
 	ld hl, 0 : ld (INTS_COUNTER), hl
 
-	jp _tmp
-
+	ifndef _PAINTER_ONLY_ 
 	ifndef _NOPAUSE_ : ld b, 255 : halt : djnz $-1 : endif
 	call PART_INTRO
 	ifndef _NOPAUSE_ : ld b, 20 : halt : djnz $-1 : endif
+	endif ; !_PAINTER_ONLY_ 
 
-_tmp	ld a, 7 : call lib.SetPage : call painter.Init
+	ifdef _PAINTER_
+	ld a, 7 : call lib.SetPage : call painter.Init
 	ld a, #01 : ld (PAINTER_STATE), a ; start painter animation
+	endif
 
-	jr $
-	
+	ifdef _PAINTER_ONLY_ : jr $ : endif
+
 	include "src/pipeline.scr1.asm"
 
 	ifndef _NOPAUSE_ : ld b, 40 : halt : djnz $-1 :	endif
 
-	include "src/pipeline.arcs.asm"
+_tmp	include "src/pipeline.arcs.asm"
 	include "src/pipeline.scr2.asm"
 	include "src/pipeline.sprms.asm"
 	
@@ -51,9 +58,11 @@ _tmp	ld a, 7 : call lib.SetPage : call painter.Init
 
 	ifndef _NOPAUSE_ : ld b, 100 : halt : djnz $-1 : endif
 
+	ifdef _PAINTER_
 	xor a : ld (PAINTER_STATE), a ; stop painter animation
 	ld a, 7 : call lib.SetPage : call painter.End
-
+	endif
+	
 	ifndef _NOPAUSE_ : ld b, 100 : halt : djnz $-1 : endif
 
 	; STOP HERE
@@ -90,10 +99,6 @@ interrCurrent	ret
 	nop
 	nop
 
-painterCurrent	ret
-	nop
-	nop
-
 interr	di
 	push af,bc,de,hl,ix,iy
 	exx : ex af, af'
@@ -114,6 +119,7 @@ MUSIC_STATE	equ $+1
 1	
 	endif
 
+	ifdef _PAINTER_
 PAINTER_STATE	equ $+1	
 	ld a, #00 : or a : jr z, 1f
 	ld a, (lib.CUR_SCREEN) : ld b, a
@@ -125,6 +131,7 @@ PAINTER_STATE	equ $+1
 	ld a, (lib.CUR_PAGE) : or b : or %00010000
 	ld bc, #7ffd : out (c), a
 1	
+	endif
 
 	call interrCurrent
 
@@ -151,6 +158,7 @@ page0e	display /d, '[page 0] free: ', #ffff - $, ' (', $, ')'
 page1s	
 PT3PLAY	include "lib/PTxPlay.asm"
 	incbin "res/nq-oops-intro-2.pt3"
+PART_WORMS	incbin "build/part.worms.bin.zx0"
 page1e	display /d, '[page 1] free: ', 65536 - $, ' (', $, ')'
 
 	define _page3 : page 3 : org #c000
@@ -159,7 +167,6 @@ PART_ARCS	incbin "build/part.arcs.bin.zx0"
 PART_SCR2	incbin "build/part.scr2.bin.zx0"
 PART_SCR3	incbin "build/part.scr3.bin.zx0"
 PART_SCR4	incbin "build/part.scr4.bin.zx0"
-PART_WORMS	incbin "build/part.worms.bin.zx0"
 page3e	display /d, '[page 3] free: ', 65536 - $, ' (', $, ')'
 
 	define _page7 : page 7 : org #db00
