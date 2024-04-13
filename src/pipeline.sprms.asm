@@ -1,11 +1,26 @@
+	ld a, 3 : call lib.SetPage
+	ld hl, PART_SCR_TOWN
+	ld de, EXTERNAL_PART_START
+	call lib.Depack
+
+	ld a, 7 : call lib.SetPage
+	ld a, %01111111
+	call lib.SetScreenAttr
+	call lib.SetScreenAttrA
+	call lib.ClearScreen
+	call lib.ClearScreenA
+	
+	ld a, %01111000
+	call lib.SetScreenAttr
+	call lib.SetScreenAttrA
+
+	call EXTERNAL_PART_START
+	; call lib.SwapScreen
+
 	xor a : call lib.SetPage
 	ld hl, PART_SPRMS
 	ld de, EXTERNAL_PART_START
 	call lib.Depack
-
-	xor a : call lib.SetScreen
-	ld a, %01111111 : call lib.SetScreenAttr
-	call lib.ClearScreen
 
 	call EXTERNAL_PART_START ; hl - адрес процедуры на прерываниях
 	call interrStart	

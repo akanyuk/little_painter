@@ -2,9 +2,10 @@
 
 	page 0
 
-	; define _DEBUG_ 1
+	; define _DEBUG_ 
 	; define _NOPAUSE_
-	define _MUSIC_ 1
+	define _MUSIC_ 
+	define _INTRO_ 
 	define _PAINTER_
 	; define _PAINTER_ONLY_
 
@@ -25,9 +26,11 @@ page0s	module lib
 	ld hl, 0 : ld (INTS_COUNTER), hl
 
 	ifndef _PAINTER_ONLY_ 
+	ifdef _INTRO_ 
 	ifndef _NOPAUSE_ : ld b, 255 : halt : djnz $-1 : endif
 	call PART_INTRO
 	ifndef _NOPAUSE_ : ld b, 20 : halt : djnz $-1 : endif
+	endif ; _INTRO_ 
 	endif ; !_PAINTER_ONLY_ 
 
 	ifdef _PAINTER_
@@ -37,12 +40,14 @@ page0s	module lib
 
 	ifdef _PAINTER_ONLY_ : jr $ : endif
 
+	jp _tmp
+
 	include "src/pipeline.scr1.asm"
 
 	ifndef _NOPAUSE_ : ld b, 40 : halt : djnz $-1 :	endif
 
 	include "src/pipeline.arcs.asm"
-	include "src/pipeline.scr2.asm"
+_tmp	include "src/pipeline.scr2.asm"
 	include "src/pipeline.sprms.asm"
 	
 	ifndef _NOPAUSE_ : ld b, 100 : halt : djnz $-1 : endif
@@ -164,6 +169,7 @@ page3s
 PART_SCR2	incbin "build/part.scr2.bin.zx0"
 PART_SCR3	incbin "build/part.scr3.bin.zx0"
 PART_SCR4	incbin "build/part.scr4.bin.zx0"
+PART_SCR_TOWN	incbin "build/part.scr-town.bin.zx0"
 page3e	display /d, '[page 3] free: ', 65536 - $, ' (', $, ')'
 
 	define _page4 : page 4 : org #c000 + 6000

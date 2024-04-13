@@ -44,14 +44,6 @@ _curColorTbl	ld hl, FADE_IN_TABLE
 init	ld hl, CHNK_DATA
 	call lib.ChunksView
 
-	; заглушка транзишена
-	; xor a : call lib.SetScreen
-	; ld a, 7 : call lib.SetPage		
-	; ld a, #45 : call lib.SetScreenAttr
-	; ld hl, #4000 : ld de, #4001 : ld bc, #17ff : ld (hl), #ff : ldir
-	; ld hl, #4000 : ld de, #c000 : ld bc, #1b00 : ldir
-	; ret
-
 	include "transition.asm"
 
 FADE_IN_TABLE

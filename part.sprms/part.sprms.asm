@@ -73,19 +73,19 @@ fadeStageSeed	equ $+1
 	ret
 
 main	
-	ld a, 20
+	ld hl, BG1
+	ld de, #4000
+	ld a, 160
 1	push af
-	call bgUP2x
-	halt
-	call bgUP2x
-	halt
-	call bgUP2x
-	call bgUpAttr
-	halt
-	call bgUP2x
-	halt
-	pop af
-	dec a : jr nz, 1b
+	push de
+	ld bc, 32
+	ldir
+	pop de
+	call lib.DownDE
+	pop af : dec a : jr nz, 1b
+	ld de, #5800
+	ld bc, 32*20
+	ldir
 
 	ld b, 50 : halt : djnz $-1
 
@@ -185,49 +185,9 @@ main
 interruptsAddr	ld hl, interr : ret
 interr	ld a, 0 : inc a : and 1 : ld (interr + 1), a
 	or a : ret z
+
 PLAYER	include "player.asm"
-
 BG1	incbin "res/bg1.bin"
-
-bgUP2x	ld hl, BG1 + 160 * 32 - 32 * 2
-_bgUP2DE	ld de, #5660
-	push hl
-	push de
-	ld b, 2
-1	push bc
-	push de
-	ld bc, 32
-	ldir
-	pop de
-	call lib.DownDE
-	pop bc
-	djnz 1b
-	pop hl
-	call UpHL 
-	call UpHL 
-	ld (_bgUP2DE + 1), hl
-	pop hl
-	ld bc, 32*2
-	sbc hl, bc
-	ld (bgUP2x + 1), hl
-	ret
-
-bgUpAttr	ld hl, BG1 + 160 * 32 + 32 * 19
-_bgUpAtDE	ld de, #5a60
-	push hl
-	push de
-	ld bc, 32
-	ldir
-	pop hl
-	ld de, 32
-	sbc hl, de
-	ld (_bgUpAtDE + 1), hl
-	pop hl
-	sbc hl, de
-	ld (bgUpAttr + 1), hl
-	ret
-
-UpHL	dec h : ld a, h : cpl : and #07 : ret nz : ld a, l : sub #20 : ld l, a : ret c : ld a, h : add a, #08 : ld h,a : ret
 
 	; hl - screen
 	; de - attr
