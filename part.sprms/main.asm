@@ -33,7 +33,7 @@ _ppPlaceholder
 	call interrStart	
 	call PART_START + 3
 
-	ld b, 160 : halt : djnz $-1
+	; ld b, 160 : halt : djnz $-1
 	ld b, 160 : halt : djnz $-1
 	
 	ld b, 50 : call PART_START + 6
