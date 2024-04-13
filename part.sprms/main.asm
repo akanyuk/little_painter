@@ -12,6 +12,8 @@ start	module lib
 	di : ld sp, start
 	ld a, 0 : out #fe, a
 
+	ld a, %01111000 : call lib.SetScreenAttr
+
 	; painter placeholder
 	ld hl, ppPlaceholder
 1	ld a, (hl) : or a : jr z, _ppPlaceholder
@@ -32,11 +34,8 @@ _ppPlaceholder
 	call PART_START ; hl - адрес процедуры на прерываниях
 	call interrStart	
 	call PART_START + 3
-
-	; ld b, 160 : halt : djnz $-1
-	ld b, 160 : halt : djnz $-1
-	
-	ld b, 50 : call PART_START + 6
+	ld b, 200 : halt : djnz $-1
+	call PART_START + 6
 
 	jr $
 
