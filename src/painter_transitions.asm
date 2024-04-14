@@ -1,5 +1,4 @@
 	ifdef _NO_PAINTER_TRANSITION_ : ret : endif
-	ret
 	ld bc, L2LAT + LLAT * 15 + 8
 1	push bc
 	ld b, (_s0data_e - TRANSITION0_DATA) / 5 ; количество кубиков в сцене

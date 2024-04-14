@@ -45,9 +45,46 @@ CopyAltScr	ld hl, #5080
 	jr nz, 1b
 	ret
 
+	; hl - sprite
+	; a - x-coord
+DispSpr96x32	ld d, #51
+	ld e, #80 : add e : ld e, a
+	ld a, 31
+1	push af
+	push de
+	ld bc, 96/8
+	ldir
+	pop de
+	call lib.DownDE
+	pop af
+	dec a
+	jr nz, 1b
+	ret
+
+	; hl - sprite
+	; a - x-coord
+DispSpr32x32	ld d, #51
+	ld e, #80 : add e : ld e, a
+	ld a, 31
+1	push af
+	push de
+	ld bc, 32/8
+	ldir
+	pop de
+	call lib.DownDE
+	pop af
+	dec a
+	jr nz, 1b
+	ret
+
 Interrupts	include "painter_interrupts.asm"
 Transition	include "src/painter_transitions.asm"
 
 	module slow_player
 	include "res/painter-anima/player.asm"
 	endmodule
+
+bgBiblio_96x32	incbin "res/painter/bg-biblio-01-96x32.pcx", 128
+sPnt0_32x32	incbin "res/painter/spr-painting-00-32x-32.pcx", 128
+sPnt1_32x32	incbin "res/painter/spr-painting-01-32x-32.pcx", 128
+sPnt2_32x32	incbin "res/painter/spr-painting-02-32x-32.pcx", 128
