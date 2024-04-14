@@ -27,7 +27,12 @@ startByInts 	ld (starterAddr), hl
 	ld (hl), low(starter) : inc hl ; jp
 	ld (hl), high(starter) ; jp
 	ret
-stopByInts 	ld hl, checker
+stopByInts 	ld hl, checker + 1
+	ld (hl), low(_stpStage2)
+	inc hl : ld (hl), high(_stpStage2) 
+	ret
+_stpStage2 	call CopyAltScr
+	ld hl, checker
 	ld (hl), 0 : inc hl 
 	ld (hl), 0 : inc hl 
 	ld (hl), 0 
