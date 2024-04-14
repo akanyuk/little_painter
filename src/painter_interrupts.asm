@@ -1,6 +1,6 @@
 	; Interrputed calls flow
-MOVE_RIGHT_S 	equ #0660
-MOVE_RIGHT_E 	equ #0a20
+MOVE_RIGHT_S 	equ #0010
+MOVE_RIGHT_E 	equ #0100
 
 MV_RIGHT_FST_S 	equ #0a22
 MV_RIGHT_FST_E 	equ #1000

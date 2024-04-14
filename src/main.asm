@@ -2,12 +2,14 @@
 
 	page 0
 
-	; define _DEBUG_ 
-	; define _NOPAUSE_
-	define _MUSIC_ 
-	define _INTRO_ 
+	; define _MUSIC_ 
+	; define _INTRO_ 
 	define _PAINTER_
-	; define _PAINTER_ONLY_
+
+	; define _NOPAUSE_
+	define _PAINTER_ONLY_
+	define _NO_PAINTER_TRANSITION_
+	; define _DEBUG_ 
 
 	define EXTERNAL_PART_START #7500
 	define P_TRACK 1 ; track and player here
@@ -40,7 +42,7 @@ page0s	module lib
 
 	ifdef _PAINTER_ONLY_ : jr $ : endif
 
-	jp _tmp
+	; jp _tmp
 
 	include "src/pipeline.scr1.asm"
 

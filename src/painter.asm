@@ -50,5 +50,5 @@ Interrupts	include "painter_interrupts.asm"
 Transition	include "src/painter_transitions.asm"
 
 	module slow_player
-	include "res/painter-sprites/player.asm"
+	include "res/painter-anima/player.asm"
 	endmodule
