@@ -30,8 +30,7 @@ FillScreenBy	equ $+1
 SetScreenAttr	ld hl, #5a80 : ld de, #5a81 : ld bc, #007f : ld (hl), a : ldir
 	ret
 
-CopyAltScr
-	ld hl, #5080
+CopyAltScr	ld hl, #5080
 	ld de, #d080	
 	ld a, 32
 1	push af
