@@ -3,12 +3,12 @@
 	page 0
 
 	; define _MUSIC_ 
-	define _INTRO_ 
+	; define _INTRO_ 
 	define _PAINTER_
 
 	; define _NOPAUSE_
-	; define _PAINTER_ONLY_
-	; define _NO_PAINTER_TRANSITION_
+	define _PAINTER_ONLY_
+	define _NO_PAINTER_TRANSITION_
 	; define _DEBUG_ 
 
 	define EXTERNAL_PART_START #7500

@@ -1,17 +1,14 @@
 	; Interrputed calls flow
-PAINT_V1	equ #061f
-MV_RIGHT 	equ #5000
-MV_RIGHT_FST 	equ #6000
+PAINT_V1	equ 8
+PAINT_V2	equ #061f
 
 checker	db 0,0,0
 	ld hl, (INTS_COUNTER)
 
 	ld de, PAINT_V1 : call checkInts : jr nz, 1f
 	ld hl, paintV1 : jp startByInts
-1	ld de, MV_RIGHT : call checkInts : jr nz, 1f
-	ld hl, moveRight : jp startByInts
-1	ld de, MV_RIGHT_FST : call checkInts : jr nz, 1f
-	ld hl, moveRightFast : jp startByInts
+1	ld de, PAINT_V2 : call checkInts : jr nz, 1f
+	ld hl, paintV2 : jp startByInts
 1	; TODO: next check
 	ret
 
@@ -47,65 +44,61 @@ starterAddr	equ $+1
 paintV1cnt	equ $+1
 paintV1	ld a, 0 : inc a : ld (paintV1cnt), a
 	cp 1 : jr nz, 1f
-	ld hl, bgBiblio_96x32 : ld a, 9 : jp DispSpr96x32
-1	cp 5 : ret c : jr nz, 1f
-	ld hl, sPnt0_32x32 : ld a, 12 : jp DispSpr32x32
-1	cp 15 : ret c
-	cp 35 : jr nc, 1f	
-	ld hl, sPnt1_32x32
+	ld hl, sPnt0_32x24 : ld a, 12 : jp DispSpr32x24
+1	cp 5 : ret c
+	cp 25 : jr nc, 1f	
+	ld hl, sPnt1_32x24
 	ld a, (paintV1cnt) : and 1 : or a : jr nz, $ + 5
-	ld hl, sPnt2_32x32
-	ld a, 12 : jp DispSpr32x32
-1	cp 35 : jr nz, 1f
-	ld hl, sPnt0_32x32 : ld a, 12 : jp DispSpr32x32
-1	cp 50 : ret c
-	cp 70 : jr nc, 1f
-	ld hl, sPnt1_32x32
+	ld hl, sPnt2_32x24
+	ld a, 12 : jp DispSpr32x24
+1	cp 25 : jr nz, 1f
+	ld hl, sPnt0_32x24 : ld a, 12 : jp DispSpr32x24
+1	cp 40 : ret c
+	cp 60 : jr nc, 1f
+	ld hl, sPnt1_32x24
 	ld a, (paintV1cnt) : and 1 : or a : jr nz, $ + 5
-	ld hl, sPnt2_32x32
-	ld a, 12 : jp DispSpr32x32
-1	cp 85 : jr nc, 1f
-	ld hl, sPnt0_32x32 : ld a, 12 : jp DispSpr32x32
+	ld hl, sPnt2_32x24
+	ld a, 12 : jp DispSpr32x24
+1	cp 68 : jr nc, 1f
+	ld hl, sPnt0_32x24 : ld a, 12 : jp DispSpr32x24
+1	cp 75 : jr nc, 1f
+	ld hl, sPnt3_32x24 : ld a, 12 : jp DispSpr32x24
+1	cp 79 : ret c : jr nz, 1f
+	ld hl, sPnt0_32x24 : ld a, 12 : jp DispSpr32x24
+1	cp 90 : ret c
+	cp 110 : jr nc, 1f
+	ld hl, sPnt1_32x24
+	ld a, (paintV1cnt) : and 1 : or a : jr nz, $ + 5
+	ld hl, sPnt2_32x24
+	ld a, 12 : jp DispSpr32x24
+1	cp 120 : jr nc, 1f
+	ld hl, sPnt0_32x24 : ld a, 12 : jp DispSpr32x24
 1	; stop here	
 	xor a : ld (paintV1cnt), a
-	call FillScreen
+	call DispBG
 	jp stopByInts 
 
-	; obsolete
-moveRight	
-_mvRightSt	equ $ + 1
-	ld a, #ff : inc a : and #0f : ld (_mvRightSt), a
-	or a : jr nz, _mrAddr
-
-	ld hl, slow_player.movingRight.FRAME_0000
-	ld (slow_player.playerReset), hl
-
-	ld a, (_mrAddr + 1)
-	inc a 
-	cp #82
-	jr nz, 1f
-	; stopping proc
-	xor a : ld (FillScreenBy), a : call FillScreen
+paintV2cnt	equ $+1
+paintV2	ld a, 0 : inc a : ld (paintV2cnt), a
+	cp 1 : jr nz, 1f
+	ld hl, sPnt0_32x24 : ld a, 12 : jp DispSpr32x24
+1	cp 5 : ret c
+	cp 25 : jr nc, 1f	
+	ld hl, sPnt1_32x24
+	ld a, (paintV2cnt) : and 1 : or a : jr nz, $ + 5
+	ld hl, sPnt2_32x24
+	ld a, 12 : jp DispSpr32x24
+1	cp 25 : jr nz, 1f
+	ld hl, sPnt0_32x24 : ld a, 12 : jp DispSpr32x24
+1	cp 40 : ret c
+	cp 60 : jr nc, 1f
+	ld hl, sPnt1_32x24
+	ld a, (paintV2cnt) : and 1 : or a : jr nz, $ + 5
+	ld hl, sPnt2_32x24
+	ld a, 12 : jp DispSpr32x24
+1	cp 75 : jr nc, 1f
+	ld hl, sPnt0_32x24 : ld a, 12 : jp DispSpr32x24
+1	; stop here	
+	xor a : ld (paintV2cnt), a
+	call DispBG
 	jp stopByInts 
-1	ld (_mrAddr + 1), a
-_mrAddr	ld de, #507f
-	jp slow_player.play
-
-moveRightFast	
-_mvRightFstSt	equ $+1
-	ld a, #ff : inc a : and #07 : ld (_mvRightFstSt), a
-	or a : jr nz, _mrfAddr
-
-	ld hl, slow_player.movingRightFast.FRAME_0000
-	ld (slow_player.playerReset), hl
-
-	ld a, (_mrfAddr + 1)
-	inc a 
-	cp #88 : 
-	jr nz, 1f
-	; stopping proc
-	xor a : ld (FillScreenBy), a : call FillScreen
-	jp stopByInts 
-1	ld (_mrfAddr + 1), a
-_mrfAddr	ld de, #507f
-	jp slow_player.play

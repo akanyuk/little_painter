@@ -1,8 +1,10 @@
 Init	
 	ld a, %00000101 : call SetScreenAttr
                 ld iy, TRANSITION0_DATA : call Transition
+	
+	; showung background
 	ld a, %00101101 : call SetScreenAttr
-	xor a : ld (FillScreenBy), a : call FillScreen
+	call DispBG
 	ld a, %00101000 : call SetScreenAttr
 	ld hl, #4000 : ld de, #c000 : ld bc, #1b00 : ldir
 	ret
@@ -45,14 +47,12 @@ CopyAltScr	ld hl, #5080
 	jr nz, 1b
 	ret
 
-	; hl - sprite
-	; a - x-coord
-DispSpr96x32	ld d, #51
-	ld e, #80 : add e : ld e, a
-	ld a, 31
+DispBG	ld hl, bg
+	ld de, #5080
+	ld a, 32
 1	push af
 	push de
-	ld bc, 96/8
+	ld bc, 32
 	ldir
 	pop de
 	call lib.DownDE
@@ -63,9 +63,9 @@ DispSpr96x32	ld d, #51
 
 	; hl - sprite
 	; a - x-coord
-DispSpr32x32	ld d, #51
-	ld e, #80 : add e : ld e, a
-	ld a, 31
+DispSpr32x24	ld d, #50
+	ld e, #a0 : add e : ld e, a
+	ld a, 24
 1	push af
 	push de
 	ld bc, 32/8
@@ -80,11 +80,8 @@ DispSpr32x32	ld d, #51
 Interrupts	include "painter_interrupts.asm"
 Transition	include "src/painter_transitions.asm"
 
-	module slow_player
-	include "res/painter-anima/player.asm"
-	endmodule
-
-bgBiblio_96x32	incbin "res/painter/bg-biblio-01-96x32.pcx", 128
-sPnt0_32x32	incbin "res/painter/spr-painting-00-32x-32.pcx", 128
-sPnt1_32x32	incbin "res/painter/spr-painting-01-32x-32.pcx", 128
-sPnt2_32x32	incbin "res/painter/spr-painting-02-32x-32.pcx", 128
+bg	incbin "res/painter/bg.pcx", 128
+sPnt0_32x24	incbin "res/painter/painting-00-32x24.pcx", 128
+sPnt1_32x24	incbin "res/painter/painting-01-32x24.pcx", 128
+sPnt2_32x24	incbin "res/painter/painting-02-32x24.pcx", 128
+sPnt3_32x24	incbin "res/painter/painting-03-32x24.pcx", 128
