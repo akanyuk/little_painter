@@ -1,6 +1,6 @@
 	; Interrputed calls flow
-PAINT_V1	equ 8
-PAINT_V2	equ #061f
+PAINT_V2	equ #0680
+PAINT_V1	equ #1430
 
 checker	db 0,0,0
 	ld hl, (INTS_COUNTER)

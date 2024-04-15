@@ -2,13 +2,13 @@
 
 	page 0
 
-	; define _MUSIC_ 
-	; define _INTRO_ 
+	define _MUSIC_ 
+	define _INTRO_ 
 	define _PAINTER_
 
 	; define _NOPAUSE_
-	define _PAINTER_ONLY_
-	define _NO_PAINTER_TRANSITION_
+	; define _PAINTER_ONLY_
+	; define _NO_PAINTER_TRANSITION_
 	; define _DEBUG_ 
 
 	define EXTERNAL_PART_START #7500
@@ -70,6 +70,8 @@ _tmp	include "src/pipeline.scr2.asm"
 	
 	ifndef _NOPAUSE_ : ld b, 100 : halt : djnz $-1 : endif
 
+	jr $
+	
 	; STOP HERE
 	ifdef _MUSIC_
 	ld a, P_TRACK : call lib.SetPage
@@ -162,7 +164,7 @@ page0e	display /d, '[page 0] free: ', #ffff - $, ' (', $, ')'
 	define _page1 : page 1 : org #c000
 page1s	
 PT3PLAY	include "lib/PTxPlay.asm"
-	incbin "res/nq-oops-intro-2.pt3"
+	incbin "res/Pocket Painter demo.pt3"
 PART_WORMS	incbin "build/part.worms.bin.zx0"
 page1e	display /d, '[page 1] free: ', 65536 - $, ' (', $, ')'
 
