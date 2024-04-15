@@ -1,13 +1,16 @@
 	; Interrputed calls flow
-WAKEUP	equ #0018
-GYMNASTIC	equ #0308
+EAT	equ #0010
+WAKEUP	equ #1018
+GYMNASTIC	equ #0a08
 PAINT_V2	equ #0680
 PAINT_V1	equ #1430
 
 checker	db 0,0,0
 	ld hl, (INTS_COUNTER)
 
-	ld de, WAKEUP : call checkInts : jr nz, 1f
+	ld de, EAT : call checkInts : jr nz, 1f
+	ld hl, eat : jp startByInts
+1	ld de, WAKEUP : call checkInts : jr nz, 1f
 	ld hl, wakeup : jp startByInts
 1	ld de, GYMNASTIC : call checkInts : jr nz, 1f
 	ld hl, gymnastic : jp startByInts
@@ -140,5 +143,46 @@ gymnastic	ld a, 0 : inc a : ld (gymcnt), a
 1	cp 61 : ret c
 1	; stop here	
 	xor a : ld (gymcnt), a
+	call DispBG
+	jp stopByInts 
+
+eatcnt	equ $+1
+eat	ld a, 0 : inc a : ld (eatcnt), a
+	cp 1 : jr nz, 1f
+	ld hl, eat1_24x24 : ld a, 27 : jp DispSpr24x24
+1	cp 10 : ret c : jr nz, 1f
+	ld hl, eat3_24x24 : ld a, 27 : jp DispSpr24x24
+1	cp 13 : ret c : jr nz, 1f	
+	ld hl, eat4_24x24 : ld a, 27 : jp DispSpr24x24
+1	cp 16 : ret c
+	cp 36 : jr nc, 1f
+	ld hl, eat1_24x24
+	ld a, (eatcnt) : and 1 : or a : jr nz, $ + 5
+	ld hl, eat2_24x24
+	ld a, 27 : jp DispSpr24x24
+1	cp 45 : ret c : jr nz, 1f	
+	ld hl, eat3_24x24 : ld a, 27 : jp DispSpr24x24
+1	cp 48 : ret c : jr nz, 1f	
+	ld hl, eat4_24x24 : ld a, 27 : jp DispSpr24x24
+1	cp 51 : ret c
+	cp 71 : jr nc, 1f
+	ld hl, eat1_24x24
+	ld a, (eatcnt) : and 1 : or a : jr nz, $ + 5
+	ld hl, eat2_24x24
+	ld a, 27 : jp DispSpr24x24
+1	cp 85 : ret c : jr nz, 1f
+	ld hl, eat5_24x24 : ld a, 27 : jp DispSpr24x24
+1	cp 92 : ret c : jr nz, 1f
+	ld hl, eat1_24x24 : ld a, 27 : jp DispSpr24x24
+1	cp 104 : ret c
+	cp 124 : jr nc, 1f
+	ld hl, eat1_24x24
+	ld a, (eatcnt) : and 1 : or a : jr nz, $ + 5
+	ld hl, eat2_24x24
+	ld a, 27 : jp DispSpr24x24
+1	cp 132 : ret c
+
+	; stop here	
+	xor a : ld (eatcnt), a
 	call DispBG
 	jp stopByInts 

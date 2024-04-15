@@ -86,8 +86,23 @@ DispSpr32x24	ld d, #50
 	ld a, 24
 1	push af
 	push de
-	ld bc, 32/8
-	ldir
+	ldi : ldi : ldi : ldi
+	pop de
+	call lib.DownDE
+	pop af
+	dec a
+	jr nz, 1b
+	ret
+
+	; hl - sprite
+	; a - x-coord
+DispSpr24x24	ld d, #50
+	ld e, #a0 : add e : ld e, a
+	ld a, 24
+1	push af
+	push de
+	ldi : ldi : ldi
+	inc hl
 	pop de
 	call lib.DownDE
 	pop af
@@ -113,3 +128,9 @@ bed0_48x24	incbin "res/painter/bed-00.pcx", 128
 bed1_48x24	incbin "res/painter/bed-01.pcx", 128
 bed2_48x24	incbin "res/painter/bed-02.pcx", 128
 bed4_48x24	incbin "res/painter/bed-04.pcx", 128
+
+eat1_24x24	incbin "res/painter/eat1.pcx", 128
+eat2_24x24	incbin "res/painter/eat2.pcx", 128
+eat3_24x24	incbin "res/painter/eat3.pcx", 128
+eat4_24x24	incbin "res/painter/eat4.pcx", 128
+eat5_24x24	incbin "res/painter/eat5.pcx", 128
