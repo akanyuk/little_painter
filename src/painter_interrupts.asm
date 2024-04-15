@@ -1,11 +1,14 @@
 	; Interrputed calls flow
+GYMNASTIC	equ #0008
 PAINT_V2	equ #0680
 PAINT_V1	equ #1430
 
 checker	db 0,0,0
 	ld hl, (INTS_COUNTER)
 
-	ld de, PAINT_V1 : call checkInts : jr nz, 1f
+	ld de, GYMNASTIC : call checkInts : jr nz, 1f
+	ld hl, gymnastic : jp startByInts
+1	ld de, PAINT_V1 : call checkInts : jr nz, 1f
 	ld hl, paintV1 : jp startByInts
 1	ld de, PAINT_V2 : call checkInts : jr nz, 1f
 	ld hl, paintV2 : jp startByInts
@@ -100,5 +103,21 @@ paintV2	ld a, 0 : inc a : ld (paintV2cnt), a
 	ld hl, sPnt0_32x24 : ld a, 12 : jp DispSpr32x24
 1	; stop here	
 	xor a : ld (paintV2cnt), a
+	call DispBG
+	jp stopByInts 
+
+gymcnt	equ $+1
+gymnastic	ld a, 0 : inc a : ld (gymcnt), a
+	cp 1 : jr nz, 1f
+	ld hl, gym1_32x24 : ld a, 15 : jp DispSpr32x24
+1	cp 8 : ret c
+	cp 45 : jr nc, 1f	
+	ld hl, gym2_32x24
+	ld a, (gymcnt) : and 7 : cp 4 : jr c, $ + 5
+	ld hl, gym3_32x24
+	ld a, 15 : jp DispSpr32x24
+
+1	; stop here	
+	xor a : ld (gymcnt), a
 	call DispBG
 	jp stopByInts 

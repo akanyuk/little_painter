@@ -85,3 +85,6 @@ sPnt0_32x24	incbin "res/painter/painting-00-32x24.pcx", 128
 sPnt1_32x24	incbin "res/painter/painting-01-32x24.pcx", 128
 sPnt2_32x24	incbin "res/painter/painting-02-32x24.pcx", 128
 sPnt3_32x24	incbin "res/painter/painting-03-32x24.pcx", 128
+gym1_32x24	incbin "res/painter/gym1.pcx", 128
+gym2_32x24	incbin "res/painter/gym2.pcx", 128
+gym3_32x24	incbin "res/painter/gym3.pcx", 128

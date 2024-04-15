@@ -2,13 +2,13 @@
 
 	page 0
 
-	define _MUSIC_ 
-	define _INTRO_ 
+	; define _MUSIC_ 
+	; define _INTRO_ 
 	define _PAINTER_
 
 	; define _NOPAUSE_
-	; define _PAINTER_ONLY_
-	; define _NO_PAINTER_TRANSITION_
+	define _PAINTER_ONLY_
+	define _NO_PAINTER_TRANSITION_
 	; define _DEBUG_ 
 
 	define EXTERNAL_PART_START #7500
@@ -71,7 +71,7 @@ _tmp	include "src/pipeline.scr2.asm"
 	ifndef _NOPAUSE_ : ld b, 100 : halt : djnz $-1 : endif
 
 	jr $
-	
+
 	; STOP HERE
 	ifdef _MUSIC_
 	ld a, P_TRACK : call lib.SetPage
