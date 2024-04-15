@@ -5,6 +5,8 @@ Init
 	; showung background
 	ld a, %00101101 : call SetScreenAttr
 	call DispBG
+	; sleeping at start
+	ld hl, bed0_48x24 : ld a, 4 : call DispSpr48x24
 	ld a, %00101000 : call SetScreenAttr
 	ld hl, #4000 : ld de, #c000 : ld bc, #1b00 : ldir
 	ret
@@ -63,6 +65,22 @@ DispBG	ld hl, bg
 
 	; hl - sprite
 	; a - x-coord
+DispSpr48x24	ld d, #50
+	ld e, #a0 : add e : ld e, a
+	ld a, 24
+1	push af
+	push de
+	ld bc, 48/8
+	ldir
+	pop de
+	call lib.DownDE
+	pop af
+	dec a
+	jr nz, 1b
+	ret
+
+	; hl - sprite
+	; a - x-coord
 DispSpr32x24	ld d, #50
 	ld e, #a0 : add e : ld e, a
 	ld a, 24
@@ -81,10 +99,17 @@ Interrupts	include "painter_interrupts.asm"
 Transition	include "src/painter_transitions.asm"
 
 bg	incbin "res/painter/bg.pcx", 128
+
 sPnt0_32x24	incbin "res/painter/painting-00-32x24.pcx", 128
 sPnt1_32x24	incbin "res/painter/painting-01-32x24.pcx", 128
 sPnt2_32x24	incbin "res/painter/painting-02-32x24.pcx", 128
 sPnt3_32x24	incbin "res/painter/painting-03-32x24.pcx", 128
+
 gym1_32x24	incbin "res/painter/gym1.pcx", 128
 gym2_32x24	incbin "res/painter/gym2.pcx", 128
 gym3_32x24	incbin "res/painter/gym3.pcx", 128
+
+bed0_48x24	incbin "res/painter/bed-00.pcx", 128
+bed1_48x24	incbin "res/painter/bed-01.pcx", 128
+bed2_48x24	incbin "res/painter/bed-02.pcx", 128
+bed4_48x24	incbin "res/painter/bed-04.pcx", 128

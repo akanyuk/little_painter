@@ -1,12 +1,15 @@
 	; Interrputed calls flow
-GYMNASTIC	equ #0008
+WAKEUP	equ #0018
+GYMNASTIC	equ #0308
 PAINT_V2	equ #0680
 PAINT_V1	equ #1430
 
 checker	db 0,0,0
 	ld hl, (INTS_COUNTER)
 
-	ld de, GYMNASTIC : call checkInts : jr nz, 1f
+	ld de, WAKEUP : call checkInts : jr nz, 1f
+	ld hl, wakeup : jp startByInts
+1	ld de, GYMNASTIC : call checkInts : jr nz, 1f
 	ld hl, gymnastic : jp startByInts
 1	ld de, PAINT_V1 : call checkInts : jr nz, 1f
 	ld hl, paintV1 : jp startByInts
@@ -103,6 +106,22 @@ paintV2	ld a, 0 : inc a : ld (paintV2cnt), a
 	ld hl, sPnt0_32x24 : ld a, 12 : jp DispSpr32x24
 1	; stop here	
 	xor a : ld (paintV2cnt), a
+	call DispBG
+	jp stopByInts 
+
+wakeupcnt	equ $+1
+wakeup	ld a, 0 : inc a : ld (wakeupcnt), a
+	cp 1 : jr nz, 1f
+	ld hl, bed1_48x24 : ld a, 4 : call DispSpr48x24
+1	cp 20 : ret c : jr nz, 1f	
+	ld hl, bed4_48x24 : ld a, 4 : call DispSpr48x24
+1	cp 25 : ret c : jr nz, 1f	
+	ld hl, bed1_48x24 : ld a, 4 : call DispSpr48x24
+1	cp 35 : ret c : jr nz, 1f	
+	ld hl, bed2_48x24 : ld a, 4 : call DispSpr48x24
+1	cp 40 : ret c
+	; stop here	
+	xor a : ld (wakeupcnt), a
 	call DispBG
 	jp stopByInts 
 
