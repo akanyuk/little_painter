@@ -110,13 +110,15 @@ gymcnt	equ $+1
 gymnastic	ld a, 0 : inc a : ld (gymcnt), a
 	cp 1 : jr nz, 1f
 	ld hl, gym1_32x24 : ld a, 15 : jp DispSpr32x24
-1	cp 8 : ret c
-	cp 45 : jr nc, 1f	
-	ld hl, gym2_32x24
-	ld a, (gymcnt) : and 7 : cp 4 : jr c, $ + 5
+1	cp 5 : ret c
+	cp 48 : jr nc, 1f	
 	ld hl, gym3_32x24
+	ld a, (gymcnt) : and 7 : cp 5 : jr c, $ + 5
+	ld hl, gym2_32x24
 	ld a, 15 : jp DispSpr32x24
-
+1	cp 48 : jr nz, 1f
+	ld hl, gym1_32x24 : ld a, 15 : jp DispSpr32x24
+1	cp 61 : ret c
 1	; stop here	
 	xor a : ld (gymcnt), a
 	call DispBG
