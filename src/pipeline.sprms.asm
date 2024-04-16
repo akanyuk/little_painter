@@ -15,7 +15,6 @@
 	call lib.SetScreenAttrA
 
 	call EXTERNAL_PART_START
-	; call lib.SwapScreen
 
 	xor a : call lib.SetPage
 	ld hl, PART_SPRMS

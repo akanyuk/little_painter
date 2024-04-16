@@ -2,13 +2,13 @@
 
 	page 0
 
-	; define _MUSIC_ 
-	; define _INTRO_ 
+	define _MUSIC_ 
+	define _INTRO_ 
 	define _PAINTER_
 
 	; define _NOPAUSE_
-	define _PAINTER_ONLY_
-	define _NO_PAINTER_TRANSITION_
+	; define _PAINTER_ONLY_
+	; define _NO_PAINTER_TRANSITION_
 	; define _DEBUG_ 
 
 	define EXTERNAL_PART_START #7500
@@ -31,7 +31,7 @@ page0s	module lib
 	ifdef _INTRO_ 
 	ifndef _NOPAUSE_ : ld b, 255 : halt : djnz $-1 : endif
 	call PART_INTRO
-	ifndef _NOPAUSE_ : ld b, 20 : halt : djnz $-1 : endif
+	ifndef _NOPAUSE_ : ld b, 36 : halt : djnz $-1 : endif
 	endif ; _INTRO_ 
 	endif ; !_PAINTER_ONLY_ 
 
@@ -42,14 +42,12 @@ page0s	module lib
 
 	ifdef _PAINTER_ONLY_ : jr $ : endif
 
-	; jp _tmp
-
 	include "src/pipeline.scr1.asm"
 
 	ifndef _NOPAUSE_ : ld b, 40 : halt : djnz $-1 :	endif
 
 	include "src/pipeline.arcs.asm"
-_tmp	include "src/pipeline.scr2.asm"
+	include "src/pipeline.scr2.asm"
 	include "src/pipeline.sprms.asm"
 	
 	ifndef _NOPAUSE_ : ld b, 100 : halt : djnz $-1 : endif

@@ -87,7 +87,7 @@ main
 	ld bc, 32*20
 	ldir
 
-	ld b, 50 : halt : djnz $-1
+	ld b, 150 : halt : djnz $-1
 
 	ld a, 2 : ld bc, 0*256 + 1 : call PLAYER + 3
 	ld b, 160 : halt : djnz $-1

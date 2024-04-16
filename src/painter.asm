@@ -7,7 +7,6 @@ Init
 	call DispBG
 	; sleeping at start
 	ld hl, bed0_48x24 : ld a, 4 : call DispSpr48x24
-	ld a, %00101000 : call SetScreenAttr
 	ld hl, #4000 : ld de, #c000 : ld bc, #1b00 : ldir
 	ret
 
@@ -126,7 +125,7 @@ gym3_32x24	incbin "res/painter/gym3.pcx", 128
 
 bed0_48x24	incbin "res/painter/bed-00.pcx", 128
 bed1_48x24	incbin "res/painter/bed-01.pcx", 128
-bed2_48x24	incbin "res/painter/bed-02.pcx", 128
+bed3_48x24	incbin "res/painter/bed-03.pcx", 128
 bed4_48x24	incbin "res/painter/bed-04.pcx", 128
 
 eat1_24x24	incbin "res/painter/eat1.pcx", 128
