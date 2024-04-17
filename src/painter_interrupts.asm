@@ -2,15 +2,22 @@
 DISP_BG	equ #0620
 WAKEUP	equ #06f0
 GYMNASTIC	equ #0990
-PAINT_V2	equ #0ca0
-EAT	equ #1090
-PAINT_V1	equ #1600
+STAY2	equ #0c30
+PAINT_V2	equ #0e00
+EAT	equ #10c0
+PAINT_V1	equ #1700
+
+STAY1	equ #ff00
 
 checker	db 0,0,0
 	ld hl, (INTS_COUNTER)
 
 1	ld de, DISP_BG : call checkInts : jr nz, 1f
 	ld hl, dispBG : jp startByInts
+1	ld de, STAY1 : call checkInts : jr nz, 1f
+	ld hl, stay : jp startByInts
+1	ld de, STAY2 : call checkInts : jr nz, 1f
+	ld hl, stay2 : jp startByInts
 1	ld de, EAT : call checkInts : jr nz, 1f
 	ld hl, eat : jp startByInts
 1	ld de, WAKEUP : call checkInts : jr nz, 1f
@@ -133,6 +140,32 @@ wakeup	ld a, 0 : inc a : ld (wakeupcnt), a
 	; stop here	
 	xor a : ld (wakeupcnt), a
 	call DispBG
+	jp stopByInts 
+
+staycnt	equ $+1
+stay	ld a, 0 : inc a : ld (staycnt), a
+	cp 1 : jr nz, 1f
+	ld hl, stay0_16x24 : ld a, 16 : call DispSpr16x24
+1	cp 15 : ret c : jr nz, 1f	
+	ld hl, stay1_16x24 : ld a, 16 : call DispSpr16x24
+1	cp 25 : ret c : jr nz, 1f	
+	ld hl, stay0_16x24 : ld a, 16 : call DispSpr16x24
+1	cp 35 : ret c
+	; stop here	
+	xor a : ld (staycnt), a
+	call DispBG
+	jp stopByInts 
+
+stay2cnt	equ $+1
+stay2	ld a, 0 : inc a : ld (stay2cnt), a
+	cp 1 : jr nz, 1f
+	ld hl, stay2_0_16x24 : ld a, 11 : call DispSpr16x24
+1	cp 15 : ret c : jr nz, 1f	
+	ld hl, stay2_1_16x24 : ld a, 11 : call DispSpr16x24
+1	cp 25 : ret c : jr nz, 1f	
+	ld hl, stay2_0_16x24 : ld a, 11 : call DispSpr16x24
+1	; stop here	
+	xor a : ld (stay2cnt), a
 	jp stopByInts 
 
 gymcnt	equ $+1

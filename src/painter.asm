@@ -109,10 +109,31 @@ DispSpr24x24	ld d, #50
 	jr nz, 1b
 	ret
 
+	; hl - sprite
+	; a - x-coord
+DispSpr16x24	ld d, #50
+	ld e, #a0 : add e : ld e, a
+	ld a, 24
+1	push af
+	push de
+	ldi : ldi
+	pop de
+	call lib.DownDE
+	pop af
+	dec a
+	jr nz, 1b
+	ret
+
 Interrupts	include "painter_interrupts.asm"
 Transition	include "src/painter_transitions.asm"
 
 bg	incbin "res/painter/bg.pcx", 128
+
+stay0_16x24	incbin "res/painter/stay-00.pcx", 128
+stay1_16x24	incbin "res/painter/stay-01.pcx", 128
+
+stay2_0_16x24	incbin "res/painter/stay2-0.pcx", 128
+stay2_1_16x24	incbin "res/painter/stay2-1.pcx", 128
 
 sPnt0_32x24	incbin "res/painter/painting-00-32x24.pcx", 128
 sPnt1_32x24	incbin "res/painter/painting-01-32x24.pcx", 128
