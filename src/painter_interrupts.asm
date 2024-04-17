@@ -1,13 +1,19 @@
 	; Interrputed calls flow
+; DISP_BG	equ #0008
+; WAKEUP	equ #0018
+
 DISP_BG	equ #0620
 WAKEUP	equ #06f0
-GYMNASTIC	equ #0990
-STAY2	equ #0c30
-PAINT_V2	equ #0e00
-EAT	equ #10c0
-PAINT_V1	equ #1700
-
-STAY1	equ #ff00
+GYMNASTIC	equ #0920
+EAT	equ #0b70
+PAINT_V1	equ #10e0
+STAY1	equ #1600
+STAY2	equ #1780
+PAINT_V2	equ #1890
+EAT2	equ #1b30
+STAY3	equ #2006
+STAY4	equ #20a8
+PAINT3	equ #21b8
 
 checker	db 0,0,0
 	ld hl, (INTS_COUNTER)
@@ -15,10 +21,16 @@ checker	db 0,0,0
 1	ld de, DISP_BG : call checkInts : jr nz, 1f
 	ld hl, dispBG : jp startByInts
 1	ld de, STAY1 : call checkInts : jr nz, 1f
-	ld hl, stay : jp startByInts
+	ld hl, stay1 : jp startByInts
+1	ld de, STAY3 : call checkInts : jr nz, 1f
+	ld hl, stay1 : jp startByInts
 1	ld de, STAY2 : call checkInts : jr nz, 1f
 	ld hl, stay2 : jp startByInts
+1	ld de, STAY4 : call checkInts : jr nz, 1f
+	ld hl, stay2 : jp startByInts
 1	ld de, EAT : call checkInts : jr nz, 1f
+	ld hl, eat : jp startByInts
+1	ld de, EAT2 : call checkInts : jr nz, 1f
 	ld hl, eat : jp startByInts
 1	ld de, WAKEUP : call checkInts : jr nz, 1f
 	ld hl, wakeup : jp startByInts
@@ -28,6 +40,8 @@ checker	db 0,0,0
 	ld hl, paintV1 : jp startByInts
 1	ld de, PAINT_V2 : call checkInts : jr nz, 1f
 	ld hl, paintV2 : jp startByInts
+1	ld de, PAINT3 : call checkInts : jr nz, 1f
+	ld hl, paintV3 : jp startByInts
 1	; TODO: next check
 	ret
 
@@ -104,6 +118,7 @@ paintV1	ld a, 0 : inc a : ld (paintV1cnt), a
 paintV2cnt	equ $+1
 paintV2	ld a, 0 : inc a : ld (paintV2cnt), a
 	cp 1 : jr nz, 1f
+	ld a, 11 : call DispBgCol
 	ld hl, sPnt0_32x24 : ld a, 12 : jp DispSpr32x24
 1	cp 5 : ret c
 	cp 25 : jr nc, 1f	
@@ -126,30 +141,60 @@ paintV2	ld a, 0 : inc a : ld (paintV2cnt), a
 	call DispBG
 	jp stopByInts 
 
+paintV3cnt	equ $+1
+paintV3	ld a, 0 : inc a : ld (paintV3cnt), a
+	cp 1 : jr nz, 1f
+	ld a, 11 : call DispBgCol
+	ld hl, sPnt0_32x24 : ld a, 12 : jp DispSpr32x24
+1	cp 5 : ret c
+	cp 30 : jr nc, 1f	
+	ld hl, sPnt1_32x24
+	ld a, (paintV3cnt) : and 1 : or a : jr nz, $ + 5
+	ld hl, sPnt2_32x24
+	ld a, 12 : jp DispSpr32x24
+1	cp 30 : jr nz, 1f
+	ld hl, sPnt0_32x24 : ld a, 12 : jp DispSpr32x24
+1	cp 45 : ret c
+	cp 75 : jr nc, 1f
+	ld hl, sPnt1_32x24
+	ld a, (paintV3cnt) : and 1 : or a : jr nz, $ + 5
+	ld hl, sPnt2_32x24
+	ld a, 12 : jp DispSpr32x24
+1	cp 80 : jr nc, 1f
+	ld hl, sPnt0_32x24 : ld a, 12 : jp DispSpr32x24
+1	; stop here	
+	xor a : ld (paintV3cnt), a
+	call DispBG
+	jp stopByInts 
+
 wakeupcnt	equ $+1
 wakeup	ld a, 0 : inc a : ld (wakeupcnt), a
 	cp 1 : jr nz, 1f
-	ld hl, bed1_48x24 : ld a, 4 : call DispSpr48x24
+	ld hl, bed1_48x24 : ld a, 4 : jp DispSpr48x24
 1	cp 10 : ret c : jr nz, 1f	
-	ld hl, bed4_48x24 : ld a, 4 : call DispSpr48x24
+	ld hl, bed4_48x24 : ld a, 4 : jp DispSpr48x24
+1	cp 30 : ret c : jr nz, 1f	
+	ld hl, bed1_48x24 : ld a, 4 : jp DispSpr48x24
 1	cp 40 : ret c : jr nz, 1f	
-	ld hl, bed1_48x24 : ld a, 4 : call DispSpr48x24
-1	cp 50 : ret c : jr nz, 1f	
-	ld hl, bed3_48x24 : ld a, 4 : call DispSpr48x24
-1	cp 60 : ret c
+	ld hl, bed3_48x24 : ld a, 4 : jp DispSpr48x24
+1	cp 45 : ret c : jr nz, 1f	
+	ld a, 4 : call DispBgCol
+	ld a, 5 : call DispBgCol
+	ld hl, bed5_16x24 : xor a : jp DispSpr16x24
+1	cp 50 : ret c
 	; stop here	
 	xor a : ld (wakeupcnt), a
 	call DispBG
 	jp stopByInts 
 
 staycnt	equ $+1
-stay	ld a, 0 : inc a : ld (staycnt), a
+stay1	ld a, 0 : inc a : ld (staycnt), a
 	cp 1 : jr nz, 1f
-	ld hl, stay0_16x24 : ld a, 16 : call DispSpr16x24
+	ld hl, stay0_16x24 : ld a, 16 : jp DispSpr16x24
 1	cp 15 : ret c : jr nz, 1f	
-	ld hl, stay1_16x24 : ld a, 16 : call DispSpr16x24
+	ld hl, stay1_16x24 : ld a, 16 : jp DispSpr16x24
 1	cp 25 : ret c : jr nz, 1f	
-	ld hl, stay0_16x24 : ld a, 16 : call DispSpr16x24
+	ld hl, stay0_16x24 : ld a, 16 : jp DispSpr16x24
 1	cp 35 : ret c
 	; stop here	
 	xor a : ld (staycnt), a
@@ -159,11 +204,11 @@ stay	ld a, 0 : inc a : ld (staycnt), a
 stay2cnt	equ $+1
 stay2	ld a, 0 : inc a : ld (stay2cnt), a
 	cp 1 : jr nz, 1f
-	ld hl, stay2_0_16x24 : ld a, 11 : call DispSpr16x24
+	ld hl, stay2_0_16x24 : ld a, 11 : jp DispSpr16x24
 1	cp 15 : ret c : jr nz, 1f	
-	ld hl, stay2_1_16x24 : ld a, 11 : call DispSpr16x24
+	ld hl, stay2_1_16x24 : ld a, 11 : jp DispSpr16x24
 1	cp 25 : ret c : jr nz, 1f	
-	ld hl, stay2_0_16x24 : ld a, 11 : call DispSpr16x24
+	ld hl, stay2_0_16x24 : ld a, 11 : jp DispSpr16x24
 1	; stop here	
 	xor a : ld (stay2cnt), a
 	jp stopByInts 
@@ -173,14 +218,14 @@ gymnastic	ld a, 0 : inc a : ld (gymcnt), a
 	cp 1 : jr nz, 1f
 	ld hl, gym1_32x24 : ld a, 15 : jp DispSpr32x24
 1	cp 8 : ret c
-	cp 50 : jr nc, 1f	
+	cp 60 : jr nc, 1f	
 	ld hl, gym3_32x24
 	ld a, (gymcnt) : and 7 : cp 5 : jr c, $ + 5
 	ld hl, gym2_32x24
 	ld a, 15 : jp DispSpr32x24
-1	cp 50 : jr nz, 1f
+1	cp 60 : jr nz, 1f
 	ld hl, gym1_32x24 : ld a, 15 : jp DispSpr32x24
-1	cp 55 : ret c
+1	cp 65 : ret c
 1	; stop here	
 	xor a : ld (gymcnt), a
 	call DispBG
