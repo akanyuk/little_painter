@@ -66,7 +66,7 @@ page0s	module lib
 	ld a, 7 : call lib.SetPage : call painter.End
 	endif
 	
-	ifndef _NOPAUSE_ : ld b, 100 : halt : djnz $-1 : endif
+	ifndef _NOPAUSE_ : ld b, 50 : halt : djnz $-1 : endif
 
 	include "src/pipeline.lastcit.asm"
 

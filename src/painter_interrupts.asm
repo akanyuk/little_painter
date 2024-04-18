@@ -1,5 +1,6 @@
 	; Interrputed calls flow
 ; DISP_BG	equ #0008
+; WAKEUP	equ #0018
 
 DISP_BG	equ #0620
 WAKEUP	equ #06f0
@@ -13,7 +14,7 @@ EAT2	equ #1b30
 STAY3	equ #2006
 STAY4	equ #20a8
 PAINT3	equ #21b8
-SLEEP	equ #2490
+SLEEP	equ #24b0
 
 checker	db 0,0,0
 	ld hl, (INTS_COUNTER)
@@ -22,20 +23,13 @@ checker	db 0,0,0
 	ld hl, dispBG : jp startByInts
 1	ld de, STAY1 : call checkInts : jr nz, 1f
 	ld hl, stay1 : jp startByInts
-1	ld de, STAY3 : call checkInts : jr nz, 1f
-	ld hl, stay1 : jp startByInts
-	ld hl, stay1 : jp startByInts
-1	ld de, STAY3 : call checkInts : jr nz, 1f
-	ld hl, stay1 : jp startByInts
 1	ld de, STAY2 : call checkInts : jr nz, 1f
 	ld hl, stay2 : jp startByInts
-1	ld de, STAY4 : call checkInts : jr nz, 1f
-	ld hl, stay2 : jp startByInts
+1	ld de, STAY3 : call checkInts : jr nz, 1f
+	ld hl, stay1 : jp startByInts
 1	ld de, STAY4 : call checkInts : jr nz, 1f
 	ld hl, stay2 : jp startByInts
 1	ld de, EAT : call checkInts : jr nz, 1f
-	ld hl, eat : jp startByInts
-1	ld de, EAT2 : call checkInts : jr nz, 1f
 	ld hl, eat : jp startByInts
 1	ld de, EAT2 : call checkInts : jr nz, 1f
 	ld hl, eat : jp startByInts
@@ -183,11 +177,9 @@ wakeupcnt	equ $+1
 wakeup	ld a, 0 : inc a : ld (wakeupcnt), a
 	cp 1 : jr nz, 1f
 	ld hl, bed1_48x24 : ld a, 4 : jp DispSpr48x24
-	ld hl, bed1_48x24 : ld a, 4 : jp DispSpr48x24
 1	cp 10 : ret c : jr nz, 1f	
 	ld hl, bed4_48x24 : ld a, 4 : jp DispSpr48x24
 1	cp 30 : ret c : jr nz, 1f	
-	ld hl, bed1_48x24 : ld a, 4 : jp DispSpr48x24
 	ld hl, bed4_48x24 : ld a, 4 : jp DispSpr48x24
 1	cp 30 : ret c : jr nz, 1f	
 	ld hl, bed1_48x24 : ld a, 4 : jp DispSpr48x24
@@ -197,15 +189,12 @@ wakeup	ld a, 0 : inc a : ld (wakeupcnt), a
 	ld a, 4 : call DispBgCol
 	ld a, 5 : call DispBgCol
 	ld hl, bed5_16x24 : xor a : jp DispSpr16x24
-1	cp 50 : ret c
-	ld hl, bed3_48x24 : ld a, 4 : jp DispSpr48x24
-1	cp 45 : ret c : jr nz, 1f	
-	ld a, 4 : call DispBgCol
-	ld a, 5 : call DispBgCol
-	ld hl, bed5_16x24 : xor a : jp DispSpr16x24
-1	cp 50 : ret c
+1	cp 50 : ret c : jr nz, 1f
+	xor a : call DispBgCol
+	ld a, 1 : jp DispBgCol
+1	cp 55 : ret c
 	; stop here	
-	; xor a : ld (wakeupcnt), a
+	xor a : ld (wakeupcnt), a
 	call DispBG
 	jp stopByInts 
 
