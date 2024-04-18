@@ -68,6 +68,8 @@ page0s	module lib
 	
 	ifndef _NOPAUSE_ : ld b, 100 : halt : djnz $-1 : endif
 
+	include "src/pipeline.lastcit.asm"
+
 	jr $
 
 	; STOP HERE
@@ -172,6 +174,7 @@ PART_SCR2	incbin "build/part.scr2.bin.zx0"
 PART_SCR3	incbin "build/part.scr3.bin.zx0"
 PART_SCR4	incbin "build/part.scr4.bin.zx0"
 PART_SCR_TOWN	incbin "build/part.scr-town.bin.zx0"
+PART_LASTCIT	incbin "build/part.lastcit.bin.zx0"
 page3e	display /d, '[page 3] free: ', 65536 - $, ' (', $, ')'
 
 	define _page4 : page 4 : org #c000 + 6000

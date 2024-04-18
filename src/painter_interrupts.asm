@@ -211,7 +211,6 @@ wakeup	ld a, 0 : inc a : ld (wakeupcnt), a
 
 staycnt	equ $+1
 stay1	ld a, 0 : inc a : ld (staycnt), a
-stay1	ld a, 0 : inc a : ld (staycnt), a
 	cp 1 : jr nz, 1f
 	ld hl, stay0_16x24 : ld a, 16 : jp DispSpr16x24
 	ld hl, stay0_16x24 : ld a, 16 : jp DispSpr16x24

@@ -27,10 +27,10 @@ _ppPlaceholder
 	ld a, 0 : call lib.SetPage
 
 	call PART_START
-	call PART_START + 3
-	ld b, 200 : halt : djnz $-1
+	; call PART_START + 3
+	; ld b, 200 : halt : djnz $-1
 	call PART_START + 6
-	ld b, 20 : halt : djnz $-1
+	; ld b, 20 : halt : djnz $-1
 	call PART_START + 9	
 
 	xor a : out (#fe), a
