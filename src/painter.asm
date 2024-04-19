@@ -1,12 +1,6 @@
 Init	
 	ld a, %00000101 : call SetScreenAttr
                 ld iy, TRANSITION0_DATA : call Transition
-	
-	; showung background
-	ld a, %00101101 : call SetScreenAttr
-	call DispBG
-	; sleeping at start
-	ld hl, bed0_48x24 : ld a, 4 : call DispSpr48x24
 	ld hl, #4000 : ld de, #c000 : ld bc, #1b00 : ldir
 	ret
 

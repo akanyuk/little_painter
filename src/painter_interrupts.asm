@@ -1,8 +1,6 @@
 	; Interrputed calls flow
-; DISP_BG	equ #0008
-; WAKEUP	equ #0018
 
-DISP_BG	equ #0620
+BEFORE_WAKE	equ #0658
 WAKEUP	equ #06f0
 GYMNASTIC	equ #0920
 EAT	equ #0b70
@@ -19,8 +17,8 @@ SLEEP	equ #24b0
 checker	db 0,0,0
 	ld hl, (INTS_COUNTER)
 
-1	ld de, DISP_BG : call checkInts : jr nz, 1f
-	ld hl, dispBG : jp startByInts
+1	ld de, BEFORE_WAKE : call checkInts : jr nz, 1f
+	ld hl, beforeWake : jp startByInts
 1	ld de, STAY1 : call checkInts : jr nz, 1f
 	ld hl, stay1 : jp startByInts
 1	ld de, STAY2 : call checkInts : jr nz, 1f
@@ -79,8 +77,7 @@ starterAddr	equ $+1
 
 	; scenes
 
-dispBG	ld a, %00101000
-	call SetScreenAttr
+beforeWake	ld hl, bed0_48x24 : ld a, 4 : call DispSpr48x24
 	jp stopByInts
 
 paintV1cnt	equ $+1

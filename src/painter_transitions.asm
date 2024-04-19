@@ -1,13 +1,95 @@
 	ifdef _NO_PAINTER_TRANSITION_ : ret : endif
 	ld bc, L2LAT + LLAT * 15 + 8
-1	push bc
+tloop	push bc
 	ld b, (_s0data_e - TRANSITION0_DATA) / 5 ; количество кубиков в сцене
                 push iy
                 call lib.PlayCubes  
 	pop iy
 	halt
-	pop bc
-	dec bc : ld a, b : or c : jr nz, 1b
+
+_bgcnt1	ld a, 255 : inc a 
+	cp 6 : jr nz, 1f
+	call dispBgLine1
+	xor a
+1	ld (_bgcnt1 + 1), a
+
+_bgcnt2	ld a, 243 : inc a 
+	cp 6 : jr nz, 1f
+	call dispBgLine2
+	xor a
+1	ld (_bgcnt2 + 1), a
+
+	pop bc	
+	dec bc : ld a, b : or c : jr nz, tloop
+	ret
+
+	
+dispBgLine1	ld hl, bg
+	ld de, #5080
+	ld a, e : cp #a0 : ret z
+	ld a, 2
+1	push af
+	push de
+	push hl
+	ld a, 16
+	ld bc, 32
+2	push af
+	ld a, (hl)
+	ld (de), a
+	add hl, bc
+	call lib.DownDE
+	pop af
+	dec a
+	jr nz, 2b
+	pop hl : inc hl
+	pop de : inc de
+	pop af : dec a : jr nz, 1b
+
+	ld hl, (dispBgLine1 + 1) : inc hl : inc hl : ld (dispBgLine1 + 1), hl
+
+	ld a, (dispBgLine1 + 5) 
+	rrca : rrca : rrca : and 3 : or #58 : ld h, a
+	ld a, (dispBgLine1 + 4) : ld l, a
+	ld (hl), %00101000
+	inc hl : ld (hl), %00101000
+	ld de, #001f : add hl, de
+	ld (hl), %00101000
+	inc hl : ld (hl), %00101000
+	ld hl, dispBgLine1 + 4 : inc (hl) : inc (hl)
+	ret
+
+dispBgLine2	ld hl, bg + 32 *16
+	ld de, #50c0
+	ld a, e : cp #e0 : ret z
+	ld a, 2
+1	push af
+	push de
+	push hl
+	ld a, 16
+	ld bc, 32
+2	push af
+	ld a, (hl)
+	ld (de), a
+	add hl, bc
+	call lib.DownDE
+	pop af
+	dec a
+	jr nz, 2b
+	pop hl : inc hl
+	pop de : inc de
+	pop af : dec a : jr nz, 1b
+
+	ld hl, (dispBgLine2 + 1) : inc hl : inc hl : ld (dispBgLine2 + 1), hl
+
+	ld a, (dispBgLine2 + 5) 
+	rrca : rrca : rrca : and 3 : or #58 : ld h, a
+	ld a, (dispBgLine2 + 4) : ld l, a
+	ld (hl), %00101000
+	inc hl : ld (hl), %00101000
+	ld de, #001f : add hl, de
+	ld (hl), %00101000
+	inc hl : ld (hl), %00101000
+	ld hl, dispBgLine2 + 4 : inc (hl) : inc (hl)
 	ret
 
 SHIFT16 	equ -#21
