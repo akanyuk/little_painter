@@ -2,7 +2,7 @@
 
 	page 0
 
-	; define _MUSIC_ 
+	define _MUSIC_ 
 	define _INTRO_ 
 	define _PAINTER_
 
