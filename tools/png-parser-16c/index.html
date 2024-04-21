@@ -12,11 +12,9 @@
 
 // SETUP BLOCK
 
-var srcImgFilename = 'mountains.png';
-var destFilename = 'mountains.data';
+var srcImgFilename = 'face.png';
 
 var destExtension = 'asm';
-
 var srcWidth = 0;
 var srcHeight = 0;
 
@@ -40,7 +38,7 @@ $(document).ready(function(){
 		$('#total').append('<div>Colors found: ' + numColors + '</div>');
 
 		var blob = new Blob([generateData(ctx)], {type: "text/plain;charset=utf-8"});
-		saveAs(blob, destFilename + '.' + destExtension);		
+		saveAs(blob, srcImgFilename + '.' + destExtension);		
 	}
 });
 

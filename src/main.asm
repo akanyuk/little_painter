@@ -70,7 +70,10 @@ page0s	module lib
 
 	include "src/pipeline.lastcit.asm"
 
-	jr $
+1	ld hl, (INTS_COUNTER)
+	ld de, #2be0
+	sbc hl, de 
+	jr nz, 1b
 
 	; STOP HERE
 	ifdef _MUSIC_
