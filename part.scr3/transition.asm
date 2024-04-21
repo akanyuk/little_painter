@@ -1,6 +1,6 @@
 	xor a : call lib.SetScreen
 	ld a, 7 : call lib.SetPage		
-	ld a, #43 : call lib.SetScreenAttr
+	ld a, #04 : call lib.SetScreenAttr
 
 	ld bc, L5LAT + LLAT * 3 + 16
 1	push bc
