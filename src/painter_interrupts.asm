@@ -311,9 +311,9 @@ sleep	ld a, 0 : inc a : ld (sleepcnt), a
 	ld hl, bed1_48x24 : ld a, 4 : jp DispSpr48x24
 1	cp 8 : ret c : jr nz, 1f	
 	ld hl, bed4_48x24 : ld a, 4 : jp DispSpr48x24
-1	cp 45 : ret c : jr nz, 1f	
+1	cp 50 : ret c : jr nz, 1f	
 	ld hl, bed1_48x24 : ld a, 4 : jp DispSpr48x24
-1	cp 65 : ret c : jr nz, 1f	
+1	cp 72 : ret c : jr nz, 1f	
 	ld hl, bed0_48x24 : ld a, 4 : jp DispSpr48x24
 1	; stop here	
 	; xor a : ld (sleepcnt), a
