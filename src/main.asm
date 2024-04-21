@@ -8,7 +8,6 @@
 
 	; define _NOPAUSE_
 	; define _PAINTER_ONLY_
-	; define _NO_PAINTER_TRANSITION_
 	; define _DEBUG_ 
 
 	define EXTERNAL_PART_START #7500
@@ -53,19 +52,13 @@ page0s	module lib
 	ifndef _NOPAUSE_ : ld b, 100 : halt : djnz $-1 : endif
 
 	include "src/pipeline.scr3.asm"
+	ifndef _NOPAUSE_ : ld b, 50 : halt : djnz $-1 : endif
 	include "src/pipeline.worms.asm"
 
 	ifndef _NOPAUSE_ : ld b, 100 : halt : djnz $-1 : endif
 
 	include "src/pipeline.scr4.asm"
 
-	ifndef _NOPAUSE_ : ld b, 100 : halt : djnz $-1 : endif
-
-	ifdef _PAINTER_
-	xor a : ld (PAINTER_STATE), a ; stop painter animation
-	ld a, 7 : call lib.SetPage : call painter.End
-	endif
-	
 	ifndef _NOPAUSE_ : ld b, 50 : halt : djnz $-1 : endif
 
 	include "src/pipeline.lastcit.asm"
@@ -82,7 +75,7 @@ page0s	module lib
 	xor a : ld (MUSIC_STATE), a
 	endif
 
-	jr $
+	di : halt
 
 musicStart	ifdef _MUSIC_
 	ld a, P_TRACK : call lib.SetPage

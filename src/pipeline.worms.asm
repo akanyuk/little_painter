@@ -35,7 +35,10 @@ A_PART_WORMS_SCENE5 	equ EXTERNAL_PART_START + 21
 	call prepareWithBlink
 
 	call A_PART_WORMS_SCENE5
-	ld bc, #ff20 : call mainShow
+	ld bc, #ff10 : call mainShow
+
+	call A_PART_WORMS_SCENE5
+	ld bc, #2830 : call mainShow
 
 	xor a : call lib.SetScreenAttr
 

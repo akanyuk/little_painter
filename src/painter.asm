@@ -1,14 +1,7 @@
 Init	
 	ld a, %00000101 : call SetScreenAttr
-                ld iy, TRANSITION0_DATA : call Transition
+                call TransitionIn
 	ld hl, #4000 : ld de, #c000 : ld bc, #1b00 : ldir
-	ret
-
-End	xor a : call lib.SetScreen
-	ld a, %00101101 : call SetScreenAttr
-	ld a, #ff : ld (FillScreenBy), a : call FillScreen
-	ld a, %00000101 : call SetScreenAttr
-	ld iy, TRANSITION1_DATA : call Transition
 	ret
 
 FillScreen	ld hl, #5080
@@ -140,7 +133,7 @@ DispSpr16x24	ld d, #50
 	ret
 
 Interrupts	include "painter_interrupts.asm"
-Transition	include "src/painter_transitions.asm"
+	include "src/painter_transitions.asm"
 
 bg	incbin "res/painter/bg.pcx", 128
 
