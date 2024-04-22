@@ -143,6 +143,7 @@ main
 	push hl
 	push hl
 	push hl
+	push hl
 	ld a, (hl)
 	call rndPhase3_0
 	halt 
@@ -166,6 +167,11 @@ main
 	ld hl, #4018
 	ld de, #5818
 	call rndClear8x8
+
+	pop hl
+	ld a, (hl)
+	call rndPhase3_1
+
 	halt 
 
 	pop hl : inc hl
@@ -322,6 +328,27 @@ rndPhase3_0	push af
 	ldi
 	ret
 
+rndPhase3_1	push af
+	push af
+	ld hl, PHS3_R1
+	ld de, #4810
+	call lineRND
+	pop af 
+	ld c, a
+	and %0000111 : ld e, a
+	ld a, c 
+	and %11111000
+	rl a : rl a
+	add e : ld e, a
+	ld hl, #5910
+	ld d, 0 : add hl, de : ex de, hl
+	pop af
+	ld hl, PHS3_R1_ATTR
+	ld b, 0 : ld c, a
+	add hl, bc
+	ldi
+	ret
+
 	; hl - px data
 	; bc - attr data
 	; de - scr addr
@@ -363,3 +390,6 @@ PHS2_R3	incbin "res/phase2-reg2.bin"
 
 PHS3_R0_ATTR	equ $+512
 PHS3_R0	incbin "res/phase3-reg0.bin"
+
+PHS3_R1_ATTR	equ $+512
+PHS3_R1	incbin "res/phase3-reg1.bin"
