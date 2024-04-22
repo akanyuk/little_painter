@@ -63,19 +63,8 @@ page0s	module lib
 
 	include "src/pipeline.lastcit.asm"
 
-1	ld hl, (INTS_COUNTER)
-	ld de, #2be0
-	sbc hl, de 
-	jr nz, 1b
-
-	; STOP HERE
-	ifdef _MUSIC_
-	ld a, P_TRACK : call lib.SetPage
-	call PT3PLAY + 8
-	xor a : ld (MUSIC_STATE), a
-	endif
-
-	di : halt
+	xor a : ld (PAINTER_STATE), a ; start painter animation
+	jr $
 
 musicStart	ifdef _MUSIC_
 	ld a, P_TRACK : call lib.SetPage
@@ -160,7 +149,7 @@ page0e	display /d, '[page 0] free: ', #ffff - $, ' (', $, ')'
 	define _page1 : page 1 : org #c000
 page1s	
 PT3PLAY	include "lib/PTxPlay.asm"
-	incbin "res/Pocket Painter demo.pt3"
+	incbin "res/Pocket Painter demo_final.pt3"
 PART_WORMS	incbin "build/part.worms.bin.zx0"
 page1e	display /d, '[page 1] free: ', 65536 - $, ' (', $, ')'
 
